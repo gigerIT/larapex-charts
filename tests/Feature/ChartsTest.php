@@ -334,6 +334,136 @@ class ChartsTest extends TestCase
     }
 
     #[Test]
+    public function it_tests_to_json_preserves_configured_option_shape(): void
+    {
+        $chart = $this->chartWithConfiguredOutputOptions();
+
+        $payload = $chart->toJson()->getData(true);
+        $options = $payload['options'];
+
+        $this->assertEquals($chart->id(), $payload['id']);
+        $this->assertEquals([
+            'id' => $chart->id(),
+            'type' => 'bar',
+            'height' => 320,
+            'width' => 640,
+            'toolbar' => ['show' => true],
+            'zoom' => ['enabled' => false],
+            'fontFamily' => null,
+            'foreColor' => config('larapex-charts.font_color'),
+            'sparkline' => '{"enabled":true}',
+            'stacked' => true,
+        ], $options['chart']);
+        $this->assertEquals(['bar' => ['horizontal' => true]], $options['plotOptions']);
+        $this->assertEquals(['#111111', '#222222'], $options['colors']);
+        $this->assertEquals([['name' => 'Revenue', 'data' => [10, 20]]], $options['series']);
+        $this->assertEquals(['enabled' => true], $options['dataLabels']);
+        $this->assertEquals(['mode' => 'dark'], $options['theme']);
+        $this->assertEquals(['text' => 'Revenue'], $options['title']);
+        $this->assertEquals(['text' => 'Quarterly', 'align' => 'right'], $options['subtitle']);
+        $this->assertEquals([
+            'type' => 'category',
+            'categories' => ['Jan', 'Feb'],
+            'labels' => ['show' => true],
+        ], $options['xaxis']);
+        $this->assertEquals(['min' => 0, 'max' => 100, 'tickAmount' => 5, 'show' => false], $options['yaxis']);
+        $this->assertEquals(['show' => false], $options['grid']);
+        $this->assertEquals(['show' => false], $options['markers']);
+        $this->assertEquals(['show' => 'false'], $options['legend']);
+        $this->assertEquals([
+            'hover' => ['filter' => ['type' => LarapexChart::STATE_NONE]],
+            'active' => [
+                'allowMultipleDataPointsSelection' => true,
+                'filter' => ['type' => LarapexChart::STATE_LIGHTEN],
+            ],
+        ], $options['states']);
+        $this->assertEquals(['North', 'South'], $options['labels']);
+        $this->assertEquals([
+            'show' => true,
+            'width' => 2,
+            'colors' => ['#333333'],
+            'curve' => 'smooth',
+        ], $options['stroke']);
+    }
+
+    #[Test]
+    public function it_tests_to_vue_preserves_configured_option_shape(): void
+    {
+        $chart = $this->chartWithConfiguredOutputOptions();
+
+        $vue = $chart->toVue();
+        $options = $vue['options'];
+
+        $this->assertEquals(320, $vue['height']);
+        $this->assertEquals(640, $vue['width']);
+        $this->assertEquals('bar', $vue['type']);
+        $this->assertEquals([(object) ['name' => 'Revenue', 'data' => [10, 20]]], $vue['series']);
+        $this->assertArrayNotHasKey('type', $options['chart']);
+        $this->assertArrayNotHasKey('width', $options['chart']);
+        $this->assertEquals($chart->id(), $options['chart']['id']);
+        $this->assertEquals(320, $options['chart']['height']);
+        $this->assertEquals((object) ['show' => true], $options['chart']['toolbar']);
+        $this->assertEquals((object) ['enabled' => false], $options['chart']['zoom']);
+        $this->assertNull($options['chart']['fontFamily']);
+        $this->assertEquals(config('larapex-charts.font_color'), $options['chart']['foreColor']);
+        $this->assertEquals((object) ['enabled' => true], $options['chart']['sparkline']);
+        $this->assertTrue($options['chart']['stacked']);
+        $this->assertEquals((object) ['horizontal' => true], $options['plotOptions']['bar']);
+        $this->assertEquals(['#111111', '#222222'], $options['colors']);
+        $this->assertEquals((object) ['enabled' => true], $options['dataLabels']);
+        $this->assertEquals(['mode' => 'dark'], $options['theme']);
+        $this->assertEquals(['text' => 'Revenue'], $options['title']);
+        $this->assertEquals(['text' => 'Quarterly', 'align' => 'right'], $options['subtitle']);
+        $this->assertEquals((object) [
+            'type' => 'category',
+            'categories' => ['Jan', 'Feb'],
+            'labels' => (object) ['show' => true],
+        ], $options['xaxis']);
+        $this->assertEquals((object) ['min' => 0, 'max' => 100, 'tickAmount' => 5, 'show' => false], $options['yaxis']);
+        $this->assertEquals((object) ['show' => false], $options['grid']);
+        $this->assertEquals((object) ['show' => false], $options['markers']);
+        $this->assertEquals(['show' => 'false'], $options['legend']);
+        $this->assertEquals([
+            'hover' => ['filter' => ['type' => LarapexChart::STATE_NONE]],
+            'active' => [
+                'allowMultipleDataPointsSelection' => true,
+                'filter' => ['type' => LarapexChart::STATE_LIGHTEN],
+            ],
+        ], $options['states']);
+        $this->assertEquals(['North', 'South'], $options['labels']);
+        $this->assertEquals((object) [
+            'show' => true,
+            'width' => 2,
+            'colors' => ['#333333'],
+            'curve' => 'smooth',
+        ], $options['stroke']);
+    }
+
+    private function chartWithConfiguredOutputOptions(): LarapexChart
+    {
+        return (new LarapexChart)->barChart()
+            ->setTitle('Revenue')
+            ->setSubtitle('Quarterly', 'right')
+            ->setHeight(320)
+            ->setWidth(640)
+            ->setHorizontal(true)
+            ->setStacked(true)
+            ->setColors(['#111111', '#222222'])
+            ->setXAxis(['Jan', 'Feb'])
+            ->setYAxis(0, 100, 5, false)
+            ->setLabels(['North', 'South'])
+            ->setStroke(2, ['#333333'], 'smooth')
+            ->setToolbar(true, false)
+            ->setDataLabels(true)
+            ->setTheme('dark')
+            ->setSparkline(true)
+            ->setShowLegend(false)
+            ->setStatesHover(LarapexChart::STATE_NONE)
+            ->setStatesActive(LarapexChart::STATE_LIGHTEN, true)
+            ->addData([10, 20], 'Revenue');
+    }
+
+    #[Test]
     public function it_tests_di_injected_instance_produces_independent_charts(): void
     {
         // Simulates: public function __construct(LarapexChart $chart) { $this->chart = $chart; }

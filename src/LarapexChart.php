@@ -542,50 +542,43 @@ class LarapexChart
     |--------------------------------------------------------------------------
     */
 
-    public function toJson(): \Illuminate\Http\JsonResponse
+    private function apexOptions(array $chartOptions, bool $includeSeries = false): array
     {
         $options = [
-            'chart' => [
-                'id' => $this->id(),
-                'type' => $this->type(),
-                'height' => $this->height(),
-                'width' => $this->width(),
-                'toolbar' => json_decode($this->toolbar()),
-                'zoom' => json_decode($this->zoom()),
-                'fontFamily' => json_decode($this->fontFamily()),
-                'foreColor' => $this->foreColor(),
-                'sparkline' => $this->sparkline(),
-                'stacked' => $this->stacked(),
-            ],
+            'chart' => $chartOptions,
             'plotOptions' => [
                 'bar' => json_decode($this->horizontal()),
             ],
             'colors' => json_decode($this->colors()),
-            'series' => json_decode($this->dataset()),
-            'dataLabels' => json_decode($this->dataLabels()),
-            'theme' => [
-                'mode' => $this->theme
-            ],
-            'title' => [
-                'text' => $this->title()
-            ],
-            'subtitle' => [
-                'text' => $this->subtitle() ? $this->subtitle() : '',
-                'align' => $this->subtitlePosition() ? $this->subtitlePosition() : '',
-            ],
-            'xaxis' => json_decode($this->xAxis()),
-            'yaxis' => [
-                'labels' => [
-                    'show' => $this->showYAxisLabels(),
-                ]
-            ],
-            'grid' => json_decode($this->grid()),
-            'markers' => json_decode($this->markers()),
-            'legend' => [
-                'show' => $this->showLegend()
-            ],
-            'states' => $this->states()['states'],
         ];
+
+        if($includeSeries) {
+            $options['series'] = json_decode($this->dataset());
+        }
+
+        $options['dataLabels'] = json_decode($this->dataLabels());
+        $options['theme'] = [
+            'mode' => $this->theme
+        ];
+        $options['title'] = [
+            'text' => $this->title()
+        ];
+        $options['subtitle'] = [
+            'text' => $this->subtitle() ? $this->subtitle() : '',
+            'align' => $this->subtitlePosition() ? $this->subtitlePosition() : '',
+        ];
+        $options['xaxis'] = json_decode($this->xAxis());
+        $options['yaxis'] = [
+            'labels' => [
+                'show' => $this->showYAxisLabels(),
+            ]
+        ];
+        $options['grid'] = json_decode($this->grid());
+        $options['markers'] = json_decode($this->markers());
+        $options['legend'] = [
+            'show' => $this->showLegend()
+        ];
+        $options['states'] = $this->states()['states'];
 
         if($this->labels()) {
             $options['labels'] = $this->labels();
@@ -597,6 +590,24 @@ class LarapexChart
         if($this->yAxis()) {
             $options['yaxis'] = json_decode($this->yAxis());
         }
+
+        return $options;
+    }
+
+    public function toJson(): \Illuminate\Http\JsonResponse
+    {
+        $options = $this->apexOptions([
+            'id' => $this->id(),
+            'type' => $this->type(),
+            'height' => $this->height(),
+            'width' => $this->width(),
+            'toolbar' => json_decode($this->toolbar()),
+            'zoom' => json_decode($this->zoom()),
+            'fontFamily' => json_decode($this->fontFamily()),
+            'foreColor' => $this->foreColor(),
+            'sparkline' => $this->sparkline(),
+            'stacked' => $this->stacked(),
+        ], true);
 
         return response()->json([
             'id' => $this->id(),
@@ -612,57 +623,16 @@ class LarapexChart
 
     public function toVue() :array
     {
-        $options = [
-            'chart' => [
-                'id' => $this->id(),
-                'height' => $this->height(),
-                'toolbar' => json_decode($this->toolbar()),
-                'zoom' => json_decode($this->zoom()),
-                'fontFamily' => json_decode($this->fontFamily()),
-                'foreColor' => $this->foreColor(),
-                'sparkline' => json_decode($this->sparkline()),
-                'stacked' => $this->stacked(),
-            ],
-            'plotOptions' => [
-                'bar' => json_decode($this->horizontal()),
-            ],
-            'colors' => json_decode($this->colors()),
-            'dataLabels' => json_decode($this->dataLabels()),
-            'theme' => [
-                'mode' => $this->theme
-            ],
-            'title' => [
-                'text' => $this->title()
-            ],
-            'subtitle' => [
-                'text' => $this->subtitle() ? $this->subtitle() : '',
-                'align' => $this->subtitlePosition() ? $this->subtitlePosition() : '',
-            ],
-            'xaxis' => json_decode($this->xAxis()),
-            'yaxis' => [
-                'labels' => [
-                    'show' => $this->showYAxisLabels(),
-                ]
-            ],
-            'grid' => json_decode($this->grid()),
-            'markers' => json_decode($this->markers()),
-            'legend' => [
-                'show' => $this->showLegend()
-            ],
-            'states' => $this->states()['states'],
-        ];
-
-        if($this->labels()) {
-            $options['labels'] = $this->labels();
-        }
-
-        if($this->stroke()) {
-            $options['stroke'] = json_decode($this->stroke());
-        }
-
-        if($this->yAxis()) {
-            $options['yaxis'] = json_decode($this->yAxis());
-        }
+        $options = $this->apexOptions([
+            'id' => $this->id(),
+            'height' => $this->height(),
+            'toolbar' => json_decode($this->toolbar()),
+            'zoom' => json_decode($this->zoom()),
+            'fontFamily' => json_decode($this->fontFamily()),
+            'foreColor' => $this->foreColor(),
+            'sparkline' => json_decode($this->sparkline()),
+            'stacked' => $this->stacked(),
+        ]);
 
         return [
             'height' => $this->height(),
@@ -673,4 +643,3 @@ class LarapexChart
         ];
     }
 }
-
