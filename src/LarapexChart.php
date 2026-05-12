@@ -89,7 +89,6 @@ class LarapexChart
         $this->sparkline = json_encode(['enabled' => false]);
         $this->fontFamily = config('larapex-charts.font_family');
         $this->foreColor = config('larapex-charts.font_color');
-        return $this;
     }
 
     public function pieChart() :PieChart
