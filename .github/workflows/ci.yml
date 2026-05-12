@@ -34,8 +34,10 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction
 
-      - name: Run Pint
-        run: composer run lint
+      - name: Run Rector and Pint
+        run: |
+          composer run refactor
+          composer run lint
 
       - name: Commit linted code
         if: github.ref_type == 'branch'
