@@ -1,16 +1,6 @@
 # Larapex Charts
 
-<p align="center">
-
-[![Latest Stable Version](https://poser.pugx.org/gigerit/larapex-charts/v/stable)](https://packagist.org/packages/gigerit/larapex-charts)
-
-[![Total Downloads](https://poser.pugx.org/gigerit/larapex-charts/downloads)](https://packagist.org/packages/gigerit/larapex-charts)
-
-![GitHub Actions](https://github.com/gigerit/larapex-charts/actions/workflows/ci.yml/badge.svg)
-
-[![License](https://poser.pugx.org/gigerit/larapex-charts/license)](https://packagist.org/packages/gigerit/larapex-charts)
-  
-</p>
+<p align="center"><a href="https://packagist.org/packages/gigerit/larapex-charts"><img src="https://img.shields.io/packagist/v/gigerit/larapex-charts?style=for-the-badge" alt="Latest Stable Version"></a> <a href="https://packagist.org/packages/gigerit/larapex-charts"><img src="https://img.shields.io/packagist/dt/gigerit/larapex-charts?style=for-the-badge" alt="Total Downloads"></a> <a href="https://github.com/gigerit/larapex-charts/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/gigerit/larapex-charts/ci.yml?style=for-the-badge" alt="GitHub Actions"></a> <a href="https://packagist.org/packages/gigerit/larapex-charts"><img src="https://img.shields.io/packagist/l/gigerit/larapex-charts?style=for-the-badge" alt="License"></a></p>
 
 Larapex Charts is a Laravel wrapper for the ApexCharts JavaScript charting
 library.
