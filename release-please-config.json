@@ -2,8 +2,7 @@
   "bootstrap-sha": "69f7f34311afb7cb0b0d02c9acb7422130912190",
   "packages": {
     ".": {
-      "release-type": "php",
-      "release-as": "10.0.0"
+      "release-type": "php"
     }
   }
 }
