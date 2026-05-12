@@ -77,7 +77,8 @@ class LarapexChart
 
     public function __construct()
     {
-        $this->id = substr(str_shuffle(str_repeat($x = $this->chartLetters, ceil(25 / strlen($x)))), 1, 25);
+        $repeatCount = (int) ceil(25 / strlen($this->chartLetters));
+        $this->id = substr(str_shuffle(str_repeat($this->chartLetters, $repeatCount)), 1, 25);
         $this->horizontal = json_encode(['horizontal' => false]);
         $this->colors = json_encode(config('larapex-charts.colors'));
         $this->setXAxis([]);
@@ -366,8 +367,8 @@ class LarapexChart
 
     public function transformLabels(array $array): bool|string
     {
-        $stringArray = array_filter($array, function($string){
-            return "{$string}";
+        $stringArray = array_filter($array, function($string): bool {
+            return (bool) "{$string}";
         });
         return json_encode(['"' . implode('","', $stringArray) . '"']);
     }
