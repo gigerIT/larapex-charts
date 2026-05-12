@@ -37,17 +37,17 @@ trait HasOptions{
                 'type' => $this->type(),
                 'height' => $this->height(),
                 'width' => $this->width(),
-                'toolbar' => json_decode($this->toolbar()),
-                'zoom' => json_decode($this->zoom()),
-                'fontFamily' => json_decode($this->fontFamily()),
+                'toolbar' => $this->decode($this->toolbar()),
+                'zoom' => $this->decode($this->zoom()),
+                'fontFamily' => $this->decode($this->fontFamily()),
                 'foreColor' => $this->foreColor(),
             ],
             'plotOptions' => [
-                'bar' => json_decode($this->horizontal()),
+                'bar' => $this->decode($this->horizontal()),
             ],
-            'colors' => json_decode($this->colors()),
-            'series' => json_decode($this->dataset()),
-            'dataLabels' => json_decode($this->dataLabels()),
+            'colors' => $this->decode($this->colors()),
+            'series' => $this->decode($this->dataset()),
+            'dataLabels' => $this->decode($this->dataLabels()),
             'title' => [
                 'text' => $this->title()
             ],
@@ -56,10 +56,10 @@ trait HasOptions{
                 'align' => $this->subtitlePosition() ? $this->subtitlePosition() : '',
             ],            
             'xaxis' => [
-                'categories' => json_decode($this->xAxis()),
+                'categories' => $this->decode($this->xAxis()),
             ],
-            'grid' => json_decode($this->grid()),
-            'markers' => json_decode($this->markers()),
+            'grid' => $this->decode($this->grid()),
+            'markers' => $this->decode($this->markers()),
         ];
     }
 }

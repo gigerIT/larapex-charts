@@ -15,6 +15,6 @@ class HorizontalBar extends LarapexChart implements MustAddComplexData
     {
         parent::__construct();
         $this->type = 'bar';
-        $this->horizontal = json_encode(['horizontal' => true]);
+        $this->horizontal = $this->encode(['horizontal' => true]);
     }
 }

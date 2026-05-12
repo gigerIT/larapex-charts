@@ -33,6 +33,11 @@ class ChartMakeCommand extends GeneratorCommand
             'Select a chart type',
             array_keys($this->chartTypes),
         );
+
+        if (! is_string($option) || ! array_key_exists($option, $this->chartTypes)) {
+            throw new \UnexpectedValueException('Invalid chart type selected.');
+        }
+
         $this->selectedChart = $this->chartTypes[$option];
     }
 

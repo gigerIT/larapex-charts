@@ -44,13 +44,13 @@ class LarapexChart
     protected string $subtitle = '';
     protected string $subtitlePosition = 'left';
     protected string $type = 'donut';
-    /** @var array<int, string|int|float> */
+    /** @var array<int, mixed> */
     protected array $labels = [];
     protected string $fontFamily;
     protected string $foreColor;
     protected string $dataset = '';
     protected int $height = 500;
-    protected int|string $width = '100%';
+    protected string $width = '100%';
     protected string $colors;
     protected string $horizontal;
     protected string $xAxis;
@@ -68,7 +68,7 @@ class LarapexChart
     protected string $theme = 'light';
     protected string $sparkline;
     private string $chartLetters = 'abcdefghijklmnopqrstuvwxyz';
-    /** @var array<string, array<string, bool|array<string, string>>> */
+    /** @var array{hover?: array{filter: array{type: string}}, active?: array{allowMultipleDataPointsSelection: bool, filter: array{type: string}}} */
     private array $states = [];
 
     /*
@@ -81,15 +81,15 @@ class LarapexChart
     {
         $repeatCount = (int) ceil(25 / strlen($this->chartLetters));
         $this->id = substr(str_shuffle(str_repeat($this->chartLetters, $repeatCount)), 1, 25);
-        $this->horizontal = json_encode(['horizontal' => false]);
-        $this->colors = json_encode(config('larapex-charts.colors'));
+        $this->horizontal = $this->encode(['horizontal' => false]);
+        $this->colors = $this->encode(config('larapex-charts.colors'));
         $this->setXAxis([]);
-        $this->grid = json_encode(['show' => false]);
-        $this->markers = json_encode(['show' => false]);
-        $this->toolbar = json_encode(['show' => false]);
-        $this->zoom = json_encode(['enabled' => true]);
-        $this->dataLabels = json_encode(['enabled' => false]);
-        $this->sparkline = json_encode(['enabled' => false]);
+        $this->grid = $this->encode(['show' => false]);
+        $this->markers = $this->encode(['show' => false]);
+        $this->toolbar = $this->encode(['show' => false]);
+        $this->zoom = $this->encode(['enabled' => true]);
+        $this->dataLabels = $this->encode(['enabled' => false]);
+        $this->sparkline = $this->encode(['enabled' => false]);
         $this->fontFamily = config('larapex-charts.font_family');
         $this->foreColor = config('larapex-charts.font_color');
     }
@@ -173,7 +173,7 @@ class LarapexChart
      */
     public function setDataset(array $dataset): LarapexChart
     {
-        $this->dataset = json_encode($dataset);
+        $this->dataset = $this->encode($dataset);
         return $this;
     }
 
@@ -185,7 +185,7 @@ class LarapexChart
 
     public function setWidth(int $width) :LarapexChart
     {
-        $this->width = $width;
+        $this->width = (string) $width;
         return $this;
     }
 
@@ -194,19 +194,19 @@ class LarapexChart
      */
     public function setColors(array $colors) :LarapexChart
     {
-        $this->colors = json_encode($colors);
+        $this->colors = $this->encode($colors);
         return $this;
     }
 
     public function setMonochromeColor(string $color) :LarapexChart
     {
-        $this->colors = json_encode([$color]);
+        $this->colors = $this->encode([$color]);
         return $this;
     }
 
     public function setHorizontal(bool $horizontal) :LarapexChart
     {
-        $this->horizontal = json_encode(['horizontal' => $horizontal]);
+        $this->horizontal = $this->encode(['horizontal' => $horizontal]);
         return $this;
     }
 
@@ -224,7 +224,7 @@ class LarapexChart
     }
 
     /**
-     * @param array<int, string|int|float> $labels
+     * @param array<int, mixed> $labels
      */
     public function setLabels(array $labels) :LarapexChart
     {
@@ -237,7 +237,7 @@ class LarapexChart
      */
     public function setXAxis(array $categories, string $type = 'category') :LarapexChart
     {   
-        $this->xAxis = json_encode([
+        $this->xAxis = $this->encode([
             'type' => $type , 
             'categories' => $categories,
             'labels' => [
@@ -254,7 +254,7 @@ class LarapexChart
      */
     public function setGrid($color = '#e5e5e5', $opacity = 0.1, int $strokeDashArray = 5) :LarapexChart
     {
-        $this->grid = json_encode([
+        $this->grid = $this->encode([
             'show' => true,
             'strokeDashArray' => $strokeDashArray,
             'row' => [
@@ -273,7 +273,7 @@ class LarapexChart
      */
     public function setYAxis($min, $max, ?int $tickAmount = null, $show = true) :LarapexChart
     {
-        $this->yAxis = json_encode([
+        $this->yAxis = $this->encode([
             'min' => $min,
             'max' => $max,
             'tickAmount' => $tickAmount ?? $max,
@@ -293,7 +293,7 @@ class LarapexChart
             $colors = config('larapex-charts.colors');
         }
 
-        $this->markers = json_encode([
+        $this->markers = $this->encode([
             'size' => $width,
             'colors' => $colors,
             'strokeColors' => "#fff",
@@ -315,7 +315,7 @@ class LarapexChart
             $colors = config('larapex-charts.colors');
         }
 
-        $this->stroke = json_encode([
+        $this->stroke = $this->encode([
             'show'    =>  true,
             'width'   =>  $width,
             'colors'  =>  $colors,
@@ -326,14 +326,14 @@ class LarapexChart
 
     public function setToolbar(bool $show, bool $zoom = true) :LarapexChart
     {
-        $this->toolbar = json_encode(['show' => $show]);
-        $this->zoom = json_encode(['enabled' => $zoom ? $zoom : false]);
+        $this->toolbar = $this->encode(['show' => $show]);
+        $this->zoom = $this->encode(['enabled' => $zoom ? $zoom : false]);
         return $this;
     }
 
     public function setDataLabels(bool $enabled = true) :LarapexChart
     {
-        $this->dataLabels = json_encode(['enabled' => $enabled]);
+        $this->dataLabels = $this->encode(['enabled' => $enabled]);
         return $this;
     }
 
@@ -345,7 +345,7 @@ class LarapexChart
 
     public function setSparkline(bool $enabled = true): LarapexChart
     {
-        $this->sparkline = json_encode(['enabled' => $enabled]);
+        $this->sparkline = $this->encode(['enabled' => $enabled]);
         return $this;
     }
 
@@ -464,7 +464,7 @@ class LarapexChart
     }
 
     /**
-     * @return array<int, string|int|float>
+     * @return array<int, mixed>
      */
     public function labels(): array
     {
@@ -486,12 +486,12 @@ class LarapexChart
         return $this->width;
     }
 
-    public function colors(): bool|string
+    public function colors(): string
     {
         return $this->colors;
     }
 
-    public function horizontal(): bool|string
+    public function horizontal(): string
     {
         return $this->horizontal;
     }
@@ -505,12 +505,12 @@ class LarapexChart
         return $this->yAxis;
     }
 
-    public function grid(): bool|string
+    public function grid(): string
     {
         return $this->grid;
     }
 
-    public function markers(): bool|string
+    public function markers(): string
     {
         return $this->markers;
     }
@@ -520,22 +520,22 @@ class LarapexChart
         return $this->stroke;
     }
 
-    public function toolbar(): bool|string
+    public function toolbar(): string
     {
         return $this->toolbar;
     }
 
-    public function zoom(): bool|string
+    public function zoom(): string
     {
         return $this->zoom;
     }
 
-    public function dataLabels(): bool|string
+    public function dataLabels(): string
     {
         return $this->dataLabels;
     }
 
-    public function sparkline(): bool|string
+    public function sparkline(): string
     {
         return $this->sparkline;
     }
@@ -683,9 +683,14 @@ class LarapexChart
     /**
      * @param string $encoded
      */
-    private function decode($encoded): mixed
+    protected function decode($encoded): mixed
     {
         return json_decode($encoded);
+    }
+
+    protected function encode(mixed $value): string
+    {
+        return json_encode($value, JSON_THROW_ON_ERROR);
     }
 
     public function toJson(): \Illuminate\Http\JsonResponse

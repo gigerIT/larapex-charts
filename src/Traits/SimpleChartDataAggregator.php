@@ -13,7 +13,7 @@ trait SimpleChartDataAggregator
      */
     public function addData(array $data) :self
     {
-        $this->dataset = json_encode($data);
+        $this->dataset = $this->encode($data);
 
         return $this;
     }

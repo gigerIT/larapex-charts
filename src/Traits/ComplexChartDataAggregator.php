@@ -16,7 +16,7 @@ trait ComplexChartDataAggregator
             'data' => $data
         ];
 
-        $this->dataset = json_encode($dataset);
+        $this->dataset = $this->encode($dataset);
 
         return $this;
     }
