@@ -38,6 +38,13 @@ composer test
 vendor/bin/phpunit
 ```
 
+Run PHPStan static analysis at level 1:
+
+```bash
+composer test:types
+vendor/bin/phpstan analyse --memory-limit=1G
+```
+
 Generate HTML coverage:
 
 ```bash
@@ -57,8 +64,8 @@ composer update --prefer-stable --prefer-dist --no-interaction
 vendor/bin/phpunit
 ```
 
-> TODO: No formatter, linter, static analyzer, dev server, debug command, or
-> deploy command is configured.
+> TODO: No formatter, linter, dev server, debug command, or deploy command is
+> configured.
 
 ## Code Style & Conventions
 
@@ -110,6 +117,8 @@ testing both command fallback and publish behavior.
 ## Testing Strategy
 
 - Tests use PHPUnit with Orchestra Testbench and `vendor/autoload.php`.
+- PHPStan is configured at level 1 in `phpstan.neon.dist`; run it with
+  `composer test:types`.
 - `tests/TestCase.php` registers the provider and facade alias, using in-memory
   SQLite.
 - Feature tests cover chart construction, view rendering, facade behavior,
@@ -144,7 +153,7 @@ testing both command fallback and publish behavior.
 - Do not run destructive git commands unless explicitly requested.
 - Keep changes compatible with Composer constraints: PHP `^8.3`,
   `illuminate/support` `^11.0|^12.0|^13.0`, Testbench `^9.0|^10.0|^11.1`,
-  PHPUnit `^11.5.50|^12.5.8|^13.0.3`.
+  PHPUnit `^11.5.50|^12.5.8|^13.0.3`, PHPStan `^2.1`.
 - Chart API or output-builder changes need tests for affected Blade, JSON, and
   Vue surfaces.
 - `make:chart` or generated-example changes need tests for published stubs and
@@ -177,6 +186,7 @@ testing both command fallback and publish behavior.
 
 - `README.md` install, usage examples, and roadmap.
 - `composer.json` metadata, autoloading, scripts, and Laravel auto-discovery.
+- `phpstan.neon.dist` PHPStan level and analysis paths.
 - `phpunit.xml.dist` PHPUnit configuration.
 - `.github/workflows/ci.yml` CI matrix and Release Please workflow.
 - `release-please-config.json` and `.release-please-manifest.json` release setup.

@@ -153,6 +153,13 @@ supported agents during `php artisan boost:install` or
 This fork is maintained by gigerIT. Contributions that improve compatibility,
 reliability, tests, documentation, or package hygiene are welcome.
 
+Before submitting changes, run the test suite and static analysis:
+
+```bash
+composer test
+composer test:types
+```
+
 The package was originally created by Ariel Mejia Dev. This fork preserves the
 original package API and credits while continuing maintenance for modern Laravel
 projects.
