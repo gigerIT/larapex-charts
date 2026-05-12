@@ -1,5 +1,12 @@
-vendor
-composer.lock
-.phpunit.result.cache
-coverage
-.idea
+/vendor/
+/composer.lock
+/.phpunit.cache/
+/.phpunit.result.cache
+/coverage/
+/build/
+/.idea/
+/.vscode/
+/bootstrap/cache/*.php
+/storage/framework/views/*.php
+/storage/logs/*.log
+phpunit.xml.dist.bak

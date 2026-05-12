@@ -1,27 +1,27 @@
 # Larapex Charts
 
 <p align="center">
- 
-[![MadeWithLaravel.com shield](https://madewithlaravel.com/storage/repo-shields/2175-shield.svg)](https://madewithlaravel.com/p/larapex-charts/shield-link)
 
-[![Latest Stable Version](https://poser.pugx.org/arielmejiadev/larapex-charts/v/stable)](https://packagist.org/packages/arielmejiadev/larapex-charts)
+[![Latest Stable Version](https://poser.pugx.org/gigerit/larapex-charts/v/stable)](https://packagist.org/packages/gigerit/larapex-charts)
 
-[![Total Downloads](https://poser.pugx.org/arielmejiadev/larapex-charts/downloads)](https://packagist.org/packages/arielmejiadev/larapex-charts)
+[![Total Downloads](https://poser.pugx.org/gigerit/larapex-charts/downloads)](https://packagist.org/packages/gigerit/larapex-charts)
 
-![GitHub Actions](https://github.com/arielmejiadev/larapex-charts/actions/workflows/main.yml/badge.svg)
+![GitHub Actions](https://github.com/gigerit/larapex-charts/actions/workflows/run-tests.yml/badge.svg)
 
-[![License](https://poser.pugx.org/arielmejiadev/larapex-charts/license)](https://packagist.org/packages/arielmejiadev/larapex-charts)
+[![License](https://poser.pugx.org/gigerit/larapex-charts/license)](https://packagist.org/packages/gigerit/larapex-charts)
   
 </p>
 
-A Laravel wrapper for apex charts library Check the documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.app/).
+A Laravel wrapper for apex charts library. This is the gigerIT-maintained fork of `arielmejiadev/larapex-charts`.
+
+Check the upstream documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.app/).
 
 ## Installation
 
 Use composer.
 
 ```bash
-composer require arielmejiadev/larapex-charts
+composer require gigerit/larapex-charts
 ```
 
 ## Usage
@@ -37,7 +37,7 @@ $chart = (new LarapexChart)->setTitle('Posts')
 
 ```
 
-Remember to import the Facade to your controller with 
+Remember to import the Facade to your controller with:
 
 ```php
 use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
@@ -49,7 +49,7 @@ Or importing the LarapexChart class:
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 ```
 
-Then in your view (Blade file) add: 
+Then in your view (Blade file) add:
 
 ```php
  <!doctype html>
@@ -97,18 +97,10 @@ Check the documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.
 
 ## Contributing
 
-The author Ariel Mejia Dev.
+This fork is maintained by gigerIT. The package was originally created by Ariel Mejia Dev.
 
 ## License
 [MIT](./LICENSE.md)
-
-## Support the project
-
-Hey 👋 thanks for considering making a donation, with these donations I can continue working to contribute to opensource projects.
-
-<a href="https://www.buymeacoffee.com/arielmejiadev">
-    <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=arielmejiadev&button_colour=FF5F5F&font_colour=ffffff&font_family=Cookie&outline_colour=000000&coffee_colour=FFDD00">
-</a>
 
 ## Roadmap for future versions
 

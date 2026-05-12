@@ -1,21 +1,32 @@
 {
-    "name": "arielmejiadev/larapex-charts",
+    "name": "gigerit/larapex-charts",
     "description": "Package to provide easy api to build apex charts on Laravel",
     "keywords": [
+        "gigerit",
         "arielmejiadev",
         "larapex",
         "charts",
         "apexcharts"
     ],
-    "homepage": "https://larapex-charts.netlify.app/",
+    "homepage": "https://github.com/gigerit/larapex-charts",
     "license": "MIT",
     "type": "library",
     "authors": [
         {
+            "name": "gigerIT",
+            "homepage": "https://github.com/gigerit",
+            "role": "Maintainer"
+        },
+        {
             "name": "ArielMejiaDev",
-            "email": "arielmejiadev@gmail.com"
+            "email": "arielmejiadev@gmail.com",
+            "role": "Original author"
         }
     ],
+    "support": {
+        "issues": "https://github.com/gigerit/larapex-charts/issues",
+        "source": "https://github.com/gigerit/larapex-charts"
+    },
     "require": {
         "php": "^8.3",
         "illuminate/support": "^11.0|^12.0|^13.0",
@@ -34,6 +45,9 @@
         "psr-4": {
             "ArielMejiaDev\\LarapexCharts\\Tests\\": "tests"
         }
+    },
+    "replace": {
+        "arielmejiadev/larapex-charts": "self.version"
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
