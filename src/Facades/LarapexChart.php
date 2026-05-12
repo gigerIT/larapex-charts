@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace ArielMejiaDev\LarapexCharts\Facades;
 
-use ArielMejiaDev\LarapexCharts\PieChart;
-use ArielMejiaDev\LarapexCharts\DonutChart;
-use ArielMejiaDev\LarapexCharts\RadialChart;
-use ArielMejiaDev\LarapexCharts\PolarAreaChart;
-use ArielMejiaDev\LarapexCharts\LineChart;
 use ArielMejiaDev\LarapexCharts\AreaChart;
 use ArielMejiaDev\LarapexCharts\BarChart;
-use ArielMejiaDev\LarapexCharts\HorizontalBar;
+use ArielMejiaDev\LarapexCharts\DonutChart;
 use ArielMejiaDev\LarapexCharts\HeatMapChart;
+use ArielMejiaDev\LarapexCharts\HorizontalBar;
+use ArielMejiaDev\LarapexCharts\LineChart;
+use ArielMejiaDev\LarapexCharts\PieChart;
+use ArielMejiaDev\LarapexCharts\PolarAreaChart;
 use ArielMejiaDev\LarapexCharts\RadarChart;
+use ArielMejiaDev\LarapexCharts\RadialChart;
 use Illuminate\Support\Facades\Facade;
 
 /**

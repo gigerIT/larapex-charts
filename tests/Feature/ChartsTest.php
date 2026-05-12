@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace ArielMejiaDev\LarapexCharts\Tests\Feature;
 
-use Illuminate\Foundation\Application;
+use ArielMejiaDev\LarapexCharts\Facades\LarapexChart as LarapexChartFacade;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\Tests\TestCase;
-use ArielMejiaDev\LarapexCharts\Facades\LarapexChart as LarapexChartFacade;
+use Illuminate\Foundation\Application;
 use PHPUnit\Framework\Attributes\Test;
 
 final class ChartsTest extends TestCase
@@ -78,13 +78,13 @@ final class ChartsTest extends TestCase
             ->setTitle('Total Users Monthly')
             ->setSubtitle('From January to March')
             ->setXAxis([
-                'Jan', 'Feb', 'Mar'
+                'Jan', 'Feb', 'Mar',
             ])
             ->setDataset([
                 [
-                    'name'  =>  'Active Users',
-                    'data'  =>  [250, 700, 1200]
-                ]
+                    'name' => 'Active Users',
+                    'data' => [250, 700, 1200],
+                ],
             ])
             ->setHeight(250)
             ->setGrid(true)
@@ -102,17 +102,17 @@ final class ChartsTest extends TestCase
             ->setTitle('Total Users Monthly')
             ->setSubtitle('From January to March')
             ->setXAxis([
-                'Jan', 'Feb', 'Mar'
+                'Jan', 'Feb', 'Mar',
             ])
             ->setDataset([
                 [
-                    'name'  =>  'Active Users',
-                    'data'  =>  [250, 700, 1200]
+                    'name' => 'Active Users',
+                    'data' => [250, 700, 1200],
                 ],
                 [
-                    'name'  =>  'New Users',
-                    'data'  =>  [1000, 1124, 2000]
-                ]
+                    'name' => 'New Users',
+                    'data' => [1000, 1124, 2000],
+                ],
             ]);
 
         $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
@@ -128,29 +128,29 @@ final class ChartsTest extends TestCase
             ->setXAxis(['Jan', 'Feb', 'Mar'])
             ->setDataset([
                 [
-                    'name'  => 'Company A',
-                    'data'  =>  [500, 1000, 1900]
+                    'name' => 'Company A',
+                    'data' => [500, 1000, 1900],
                 ],
                 [
-                    'name'  => 'Company B',
-                    'data'  => [300, 900, 1400]
+                    'name' => 'Company B',
+                    'data' => [300, 900, 1400],
                 ],
                 [
-                    'name'  => 'Company C',
-                    'data'  => [430, 245, 500]
+                    'name' => 'Company C',
+                    'data' => [430, 245, 500],
                 ],
                 [
-                    'name'  => 'Company D',
-                    'data'  => [200, 245, 700]
+                    'name' => 'Company D',
+                    'data' => [200, 245, 700],
                 ],
                 [
-                    'name'  => 'Company E',
-                    'data'  => [120, 45, 610]
+                    'name' => 'Company E',
+                    'data' => [120, 45, 610],
                 ],
                 [
-                    'name'  => 'Company F',
-                    'data'  => [420, 280, 400]
-                ]
+                    'name' => 'Company F',
+                    'data' => [420, 280, 400],
+                ],
             ]);
 
         $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
@@ -168,16 +168,16 @@ final class ChartsTest extends TestCase
             ->setDataset([
                 [
                     'name' => 'Company A',
-                    'data' => [500, 1000, 1900]
+                    'data' => [500, 1000, 1900],
                 ],
                 [
                     'name' => 'Company B',
-                    'data' => [300, 800, 1400]
+                    'data' => [300, 800, 1400],
                 ],
                 [
                     'name' => 'Company C',
-                    'data' => [304, 231, 500]
-                ]
+                    'data' => [304, 231, 500],
+                ],
             ]);
 
         $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
@@ -195,17 +195,17 @@ final class ChartsTest extends TestCase
             ->setXAxis(['Jan', 'Feb', 'Mar'])
             ->setDataset([
                 [
-                    'name'  => 'Company A',
-                    'data'  =>  [500, 1000, 1900]
+                    'name' => 'Company A',
+                    'data' => [500, 1000, 1900],
                 ],
                 [
-                    'name'  => 'Company B',
-                    'data'  => [300, 900, 1400]
+                    'name' => 'Company B',
+                    'data' => [300, 900, 1400],
                 ],
                 [
-                    'name'  => 'Company C',
-                    'data'  => [430, 245, 500]
-                ]
+                    'name' => 'Company C',
+                    'data' => [430, 245, 500],
+                ],
             ]);
 
         $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
@@ -221,41 +221,41 @@ final class ChartsTest extends TestCase
         $chart = (new LarapexChart)->heatMapChart()
             ->setTitle('Total Users')
             ->setXAxis([
-                'Jan', 'Feb', 'Mar'
+                'Jan', 'Feb', 'Mar',
             ])
             ->setDataset([
                 [
-                    'name'  =>  'Users of Basic Plan',
-                    'data'  =>  [250, 700, 1200]
+                    'name' => 'Users of Basic Plan',
+                    'data' => [250, 700, 1200],
                 ],
                 [
-                    'name'  =>  'Users of Premium Plan',
-                    'data'  =>  [1000, 1124, 2000]
-                ]
+                    'name' => 'Users of Premium Plan',
+                    'data' => [1000, 1124, 2000],
+                ],
             ]);
 
         $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
         $this->assertEquals($chart, $chart->script()->getData()['chart']);
         $this->assertSame('heatmap', $chart->type());
     }
-    
+
     #[Test]
     public function it_tests_larapex_charts_can_render_radar_chart(): void
     {
         $chart = (new LarapexChart)->radarChart()
             ->setTitle('Total Users')
             ->setXAxis([
-                'Jan', 'Feb', 'Mar'
+                'Jan', 'Feb', 'Mar',
             ])
             ->setDataset([
                 [
-                    'name'  =>  'Users of Basic Plan',
-                    'data'  =>  [250, 700, 1200]
+                    'name' => 'Users of Basic Plan',
+                    'data' => [250, 700, 1200],
                 ],
                 [
-                    'name'  =>  'Users of Premium Plan',
-                    'data'  =>  [1000, 1124, 2000]
-                ]
+                    'name' => 'Users of Premium Plan',
+                    'data' => [1000, 1124, 2000],
+                ],
             ]);
 
         $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
@@ -316,7 +316,7 @@ final class ChartsTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_multiple_charts_toVue_returns_independent_data(): void
+    public function it_tests_multiple_charts_to_vue_returns_independent_data(): void
     {
         $chart1 = (new LarapexChart)->areaChart()
             ->setTitle('Vue Chart One')

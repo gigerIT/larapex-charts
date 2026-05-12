@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace ArielMejiaDev\LarapexCharts\Tests;
 
 use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
-use Illuminate\Foundation\Application;
-use Orchestra\Testbench\TestCase as TestbenchTestCase;
 use ArielMejiaDev\LarapexCharts\LarapexChartsServiceProvider;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
+use Orchestra\Testbench\TestCase as TestbenchTestCase;
 
 class TestCase extends TestbenchTestCase
 {
@@ -22,14 +22,14 @@ class TestCase extends TestbenchTestCase
     /**
      * Sets the env data to interact as env file values
      *
-     * @param Application $app
+     * @param  Application  $app
      */
     protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connection.testing', [
-            'driver'    => 'sqlite',
-            'database'  => ':memory:'
+            'driver' => 'sqlite',
+            'database' => ':memory:',
         ]);
     }
 
@@ -45,8 +45,7 @@ class TestCase extends TestbenchTestCase
     protected function getPackageAliases($app): array
     {
         return [
-            'LarapexChart' => LarapexChart::class
+            'LarapexChart' => LarapexChart::class,
         ];
     }
-
 }

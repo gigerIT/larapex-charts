@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace ArielMejiaDev\LarapexCharts;
 
-
 use ArielMejiaDev\LarapexCharts\Contracts\MustAddComplexData;
 use ArielMejiaDev\LarapexCharts\Traits\ComplexChartDataAggregator;
 

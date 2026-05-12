@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace ArielMejiaDev\LarapexCharts\Tests\Unit;
 
+use ArielMejiaDev\LarapexCharts\LarapexChart;
+use ArielMejiaDev\LarapexCharts\Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Testing\PendingCommand;
-use ArielMejiaDev\LarapexCharts\LarapexChart;
-use ArielMejiaDev\LarapexCharts\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
 final class ChartsTest extends TestCase
@@ -70,7 +70,7 @@ final class ChartsTest extends TestCase
     #[Test]
     public function it_tests_larapex_chart_cdn_returns_a_correct_url(): void
     {
-        $this->assertSame('https://cdn.jsdelivr.net/npm/apexcharts' , (new LarapexChart)->cdn());
+        $this->assertSame('https://cdn.jsdelivr.net/npm/apexcharts', (new LarapexChart)->cdn());
     }
 
     #[Test]

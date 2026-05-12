@@ -1,14 +1,17 @@
 <?php
+
 namespace ArielMejiaDev\LarapexCharts\Traits;
-trait HasOptions{
+
+trait HasOptions
+{
     /** @var array<string, mixed>|null */
     protected ?array $options = null;
 
-        /**
+    /**
      * Get the value of options
      *
      * @return array<string, mixed>
-     */ 
+     */
     public function getOptions(): array
     {
         return $this->options ? $this->replaceOptions($this->getDefaultOption(), $this->options) : $this->getDefaultOption();
@@ -17,7 +20,7 @@ trait HasOptions{
     /**
      * Set the value of options
      *
-     * @param array<string, mixed> $options
+     * @param  array<string, mixed>  $options
      */
     public function setOptions(array $options): self
     {
@@ -27,8 +30,8 @@ trait HasOptions{
     }
 
     /**
-     * @param array<string, mixed> $defaults
-     * @param array<string, mixed> $overrides
+     * @param  array<string, mixed>  $defaults
+     * @param  array<string, mixed>  $overrides
      * @return array<string, mixed>
      */
     private function replaceOptions(array $defaults, array $overrides): array
@@ -80,12 +83,12 @@ trait HasOptions{
             'series' => $this->decode($this->dataset()),
             'dataLabels' => $this->decode($this->dataLabels()),
             'title' => [
-                'text' => $this->title()
+                'text' => $this->title(),
             ],
             'subtitle' => [
                 'text' => $this->subtitle() ?: '',
                 'align' => $this->subtitlePosition() ?: '',
-            ],            
+            ],
             'xaxis' => [
                 'categories' => $this->decode($this->xAxis()),
             ],

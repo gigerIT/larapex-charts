@@ -45,6 +45,7 @@ class ChartMakeCommand extends GeneratorCommand
     public function handle(): ?bool
     {
         $this->askChartType();
+
         return parent::handle();
     }
 
@@ -113,7 +114,7 @@ class ChartMakeCommand extends GeneratorCommand
     #[\Override]
     protected function getDefaultNamespace($rootNamespace): string
     {
-        return $rootNamespace . '\Charts';
+        return $rootNamespace.'\Charts';
     }
 
     /**
