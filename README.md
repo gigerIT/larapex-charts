@@ -139,6 +139,15 @@ You can create a variety of charts including: Line, Area, Bar, Horizontal Bar, H
 
 Check the documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.app/)
 
+## Laravel Boost
+
+This package ships a Laravel Boost skill for AI-assisted development. When an
+application has both `gigerit/larapex-charts` and `laravel/boost` installed,
+Boost can discover the package skill from
+`resources/boost/skills/larapex-charts-development/SKILL.md` and install it for
+supported agents during `php artisan boost:install` or
+`php artisan boost:update --discover`.
+
 ## Contributing
 
 This fork is maintained by gigerIT. Contributions that improve compatibility,

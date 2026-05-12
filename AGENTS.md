@@ -14,6 +14,8 @@ chart outputs.
 - `bootstrap/cache/` contains tracked Laravel package discovery cache files.
 - `build/` contains tracked test report artifacts.
 - `config/` contains the publishable `larapex-charts.php` package config.
+- `resources/boost/` contains Laravel Boost package resources distributed to
+  consuming apps, including the package Agent Skill.
 - `src/` contains the package source, chart classes, facade, contracts, traits,
   console command, and command fallback stubs.
 - `storage/` contains tracked Laravel log and compiled view artifacts.
@@ -244,6 +246,9 @@ publish behavior.
 
 - Laravel auto-discovers `LarapexChartsServiceProvider` and the `LarapexChart`
   facade through `composer.json`.
+- Laravel Boost can discover the package skill from
+  `resources/boost/skills/larapex-charts-development/SKILL.md` in consuming
+  apps that install both this package and `laravel/boost`.
 - Consumers can publish `config/larapex-charts.php` to customize font family,
   font color, and the default color palette.
 - Consumers can publish package views and the local ApexCharts asset with the
