@@ -1,13 +1,10 @@
-name: run-tests
+name: ci
 
 on:
   push:
-    paths:
-      - '**.php'
-      - '.github/workflows/run-tests.yml'
-      - 'phpunit.xml.dist'
-      - 'composer.json'
-      - 'composer.lock'
+
+permissions:
+  contents: read
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -60,3 +57,19 @@ jobs:
 
       - name: Execute tests
         run: vendor/bin/phpunit
+
+  release-please:
+    name: Release Please
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Create release pull request or GitHub release
+        uses: googleapis/release-please-action@v5
+        with:
+          release-type: php

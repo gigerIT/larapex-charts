@@ -253,7 +253,7 @@ publish behavior.
 - `composer.json` for package metadata, autoloading, scripts, and Laravel
   auto-discovery.
 - `phpunit.xml.dist` for PHPUnit configuration.
-- `.github/workflows/run-tests.yml` for the CI matrix.
+- `.github/workflows/ci.yml` for the CI matrix and Release Please automation.
 - `config/larapex-charts.php` for configurable package defaults.
 - `src/LarapexChart.php` for the fluent chart API and output builders.
 - `src/LarapexChartsServiceProvider.php` for bindings, publish tags, and views.

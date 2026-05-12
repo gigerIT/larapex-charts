@@ -6,19 +6,73 @@
 
 [![Total Downloads](https://poser.pugx.org/gigerit/larapex-charts/downloads)](https://packagist.org/packages/gigerit/larapex-charts)
 
-![GitHub Actions](https://github.com/gigerit/larapex-charts/actions/workflows/run-tests.yml/badge.svg)
+![GitHub Actions](https://github.com/gigerit/larapex-charts/actions/workflows/ci.yml/badge.svg)
 
 [![License](https://poser.pugx.org/gigerit/larapex-charts/license)](https://packagist.org/packages/gigerit/larapex-charts)
   
 </p>
 
-A Laravel wrapper for apex charts library. This is the gigerIT-maintained fork of `arielmejiadev/larapex-charts`.
+Larapex Charts is a Laravel wrapper for the ApexCharts JavaScript charting
+library.
 
-Check the upstream documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.app/).
+This package is the gigerIT-maintained fork of
+`arielmejiadev/larapex-charts`. It continues the original package with ongoing
+maintenance, compatibility updates, code cleanups, optimizations, and support
+for current Laravel versions, including Laravel 13.
+
+It is a drop-in replacement for the original package. Existing applications do
+not need code changes, namespace changes, config changes, or view changes. The
+public API, service provider, facade, publishable assets, and generated chart
+stubs remain compatible with the original package.
+
+Check the upstream documentation on:
+[Larapex Chart Docs](https://larapex-charts.netlify.app/).
+
+## About this fork
+
+This fork keeps Larapex Charts usable in modern Laravel applications while
+preserving the original developer experience. The goal is to provide a reliable
+maintenance path for projects that already depend on Larapex Charts and for new
+projects that want the same simple chart-building API.
+
+Maintained improvements include:
+
+- Laravel 13 compatibility, alongside the currently supported Laravel versions.
+- Composer metadata updates so the package can be installed as
+  `gigerit/larapex-charts` from Packagist.
+- Package cleanups to remove generated files, IDE metadata, logs, test reports,
+  and other local artifacts from distributed releases.
+- Repository and release hygiene improvements for cleaner installs and more
+  predictable package archives.
+- Ongoing maintenance, fixes, and optimizations while keeping the package
+  compatible with existing usage.
+
+## Drop-in replacement
+
+Use this fork when you want a maintained version of Larapex Charts without
+rewriting existing application code.
+
+If your application currently uses `arielmejiadev/larapex-charts`, replace the
+Composer dependency with this fork:
+
+```bash
+composer remove arielmejiadev/larapex-charts
+composer require gigerit/larapex-charts
+```
+
+No PHP imports need to change. Continue using the existing namespace:
+
+```php
+use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
+```
+
+The package also declares a Composer replacement for the original package name,
+so downstream packages that require `arielmejiadev/larapex-charts` can be
+satisfied by this fork.
 
 ## Installation
 
-Use composer.
+Install the maintained fork with Composer:
 
 ```bash
 composer require gigerit/larapex-charts
@@ -97,7 +151,12 @@ Check the documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.
 
 ## Contributing
 
-This fork is maintained by gigerIT. The package was originally created by Ariel Mejia Dev.
+This fork is maintained by gigerIT. Contributions that improve compatibility,
+reliability, tests, documentation, or package hygiene are welcome.
+
+The package was originally created by Ariel Mejia Dev. This fork preserves the
+original package API and credits while continuing maintenance for modern Laravel
+projects.
 
 ## License
 [MIT](./LICENSE.md)
