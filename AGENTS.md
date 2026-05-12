@@ -52,6 +52,13 @@ composer refactor -- --dry-run
 vendor/bin/rector --dry-run
 ```
 
+Run Laravel Pint:
+
+```bash
+composer lint
+composer lint:test
+```
+
 Generate HTML coverage:
 
 ```bash
@@ -71,8 +78,9 @@ composer update --prefer-stable --prefer-dist --no-interaction
 vendor/bin/phpunit
 ```
 
-> TODO: No formatter, linter, dev server, debug command, or deploy command is
-> configured. Rector is configured as an automated refactoring tool.
+> TODO: No dev server, debug command, or deploy command is configured. Laravel
+> Pint is configured as the formatter/linter, and Rector is configured as an
+> automated refactoring tool.
 
 ## Code Style & Conventions
 
@@ -88,7 +96,8 @@ vendor/bin/phpunit
   `ComplexChartDataAggregator`.
 - Preserve public names and return shapes for `container()`, `script()`,
   `toJson()`, and `toVue()` unless the task explicitly changes API behavior.
-- No configured formatter or commit message template exists.
+- Laravel Pint is the configured formatter/linter; no commit message template
+  exists.
 
 ## Architecture Notes
 
@@ -134,7 +143,8 @@ testing both command fallback and publish behavior.
   the ApexCharts CDN URL.
 - `phpunit.xml.dist` randomizes order and fails on warnings, risky tests, and
   empty suites.
-- CI runs PHPStan before PHPUnit, a single Ubuntu coverage job with PCOV, and
+- CI runs Pint before PHPStan and PHPUnit, commits Pint formatting fixes from
+  the workflow when needed, then runs a single Ubuntu coverage job with PCOV and
   the PHPUnit matrix on Ubuntu and Windows for PHP 8.3, 8.4, 8.5; Laravel 11,
   12, 13; and `prefer-lowest` plus `prefer-stable`.
 - No end-to-end/browser suite is configured.

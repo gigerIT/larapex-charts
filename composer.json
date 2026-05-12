@@ -37,7 +37,8 @@
         "orchestra/testbench": "^9.0|^10.0|^11.1",
         "phpunit/phpunit": "^11.5.50|^12.5.8|^13.0.3",
         "phpstan/phpstan": "^2.1",
-        "rector/rector": "^2.4"
+        "rector/rector": "^2.4",
+        "laravel/pint": "^1.29"
     },
     "autoload": {
         "psr-4": {
@@ -53,6 +54,8 @@
         "arielmejiadev/larapex-charts": "self.version"
     },
     "scripts": {
+        "lint": "vendor/bin/pint",
+        "lint:test": "vendor/bin/pint --test",
         "refactor": "vendor/bin/rector",
         "test": "vendor/bin/phpunit",
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",

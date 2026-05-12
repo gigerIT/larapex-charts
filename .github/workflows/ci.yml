@@ -12,13 +12,48 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  lint:
+    name: Pint
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.5
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick, fileinfo
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Run Pint
+        run: composer run lint
+
+      - name: Commit linted code
+        if: github.ref_type == 'branch'
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "style: lint"
+          branch: ${{ github.ref_name }}
+
   phpstan:
     name: PHPStan
+    needs: lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -60,6 +95,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -92,6 +129,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
