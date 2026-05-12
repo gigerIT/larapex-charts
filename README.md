@@ -30,6 +30,8 @@ Maintained improvements include:
 - Laravel 13 compatibility, alongside the currently supported Laravel versions.
 - Composer metadata updates so the package can be installed as
   `gigerit/larapex-charts` from Packagist.
+- CI coverage for PHPUnit, PHPStan static analysis, and a Laravel/PHP
+  compatibility matrix.
 - Package cleanups to remove generated files, IDE metadata, logs, test reports,
   and other local artifacts from distributed releases.
 - Repository and release hygiene improvements for cleaner installs and more
@@ -171,9 +173,8 @@ projects.
 
 - [ ] Add blade directive `@apexchartscdn`
 - [ ] Add blade directive `@script($chart)`
-- [ ] Add a chain options setter for charts
-- [ ] Update Github Actions to run tests
-- [ ] Update the package in general for more efficient & modern practices (spatie skeleton package)
+- [ ] Expand `setOptions()` documentation with advanced ApexCharts examples
+- [ ] Continue modernizing internals while preserving the drop-in API
 - [ ] Add ReactJS + Inertia Support
 - [ ] Add More complex charts
 - [ ] Add More complex boilerplate code using Laravel/Prompts

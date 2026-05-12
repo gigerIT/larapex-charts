@@ -127,9 +127,9 @@ testing both command fallback and publish behavior.
   the ApexCharts CDN URL.
 - `phpunit.xml.dist` randomizes order and fails on warnings, risky tests, and
   empty suites.
-- CI runs PHPStan before the PHPUnit matrix, then PHPUnit on Ubuntu and Windows
-  for PHP 8.3, 8.4, 8.5; Laravel 11, 12, 13; and `prefer-lowest` plus
-  `prefer-stable`.
+- CI runs PHPStan before PHPUnit, a single Ubuntu coverage job with PCOV, and
+  the PHPUnit matrix on Ubuntu and Windows for PHP 8.3, 8.4, 8.5; Laravel 11,
+  12, 13; and `prefer-lowest` plus `prefer-stable`.
 - No end-to-end/browser suite is configured.
 
 ## Security & Compliance
