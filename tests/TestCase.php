@@ -8,8 +8,7 @@ class TestCase extends TestbenchTestCase
     /**
      * Sets the env data to interact as env file values
      *
-     * @param [type] $app
-     * @return void
+     * @param \Illuminate\Foundation\Application $app
      */
     protected function getEnvironmentSetUp($app): void
     {
