@@ -203,7 +203,7 @@ publish behavior.
   the ApexCharts CDN URL.
 - `phpunit.xml.dist` randomizes execution order and fails on warnings, risky
   tests, and empty suites.
-- CI runs PHPUnit on Ubuntu and Windows for PHP 8.3 and 8.4, Laravel 11, 12, and
+- CI runs PHPUnit on Ubuntu and Windows for PHP 8.3, 8.4, and 8.5, Laravel 11, 12, and
   13, and both `prefer-lowest` and `prefer-stable` dependency sets.
 - No end-to-end/browser test suite is configured.
 
@@ -232,7 +232,7 @@ publish behavior.
   explicitly requests it.
 - Keep source changes compatible with the supported Composer constraints:
   PHP `^8.3`, `illuminate/support` `^11.0|^12.0|^13.0`,
-  `orchestra/testbench` `^9.0|^10.0|^11.0`, and PHPUnit `^11.5.3|^12.0`.
+  `orchestra/testbench` `^9.0|^10.0|^11.1`, and PHPUnit `^11.5.50|^12.5.8|^13.0.3`.
 - When changing chart APIs or output builders, add or update tests for Blade,
   JSON, and Vue behavior where the change can affect those surfaces.
 - When changing `make:chart` or generated chart examples, test both published
