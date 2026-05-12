@@ -66,4 +66,187 @@ class ChartsTest extends TestCase
     {
         $this->assertEquals('https://cdn.jsdelivr.net/npm/apexcharts' , (new LarapexChart)->cdn());
     }
+
+    #[Test]
+    public function it_tests_larapex_chart_default_state(): void
+    {
+        $chart = new LarapexChart;
+
+        $this->assertSame('donut', $chart->type());
+        $this->assertSame('', $chart->title());
+        $this->assertSame('', $chart->subtitle());
+        $this->assertSame('left', $chart->subtitlePosition());
+        $this->assertSame([], $chart->labels());
+        $this->assertSame('', $chart->dataset());
+        $this->assertSame(500, $chart->height());
+        $this->assertSame('100%', $chart->width());
+        $this->assertSame(config('larapex-charts.font_family'), $chart->fontFamily());
+        $this->assertSame(config('larapex-charts.font_color'), $chart->foreColor());
+        $this->assertSame(config('larapex-charts.colors'), json_decode($chart->colors(), true));
+        $this->assertSame(['horizontal' => false], json_decode($chart->horizontal(), true));
+        $this->assertSame([
+            'type' => 'category',
+            'categories' => [],
+            'labels' => ['show' => true],
+        ], json_decode($chart->xAxis(), true));
+        $this->assertSame(['show' => false], json_decode($chart->grid(), true));
+        $this->assertSame(['show' => false], json_decode($chart->markers(), true));
+        $this->assertSame(['show' => false], json_decode($chart->toolbar(), true));
+        $this->assertSame(['enabled' => true], json_decode($chart->zoom(), true));
+        $this->assertSame(['enabled' => false], json_decode($chart->dataLabels(), true));
+        $this->assertSame(['enabled' => false], json_decode($chart->sparkline(), true));
+        $this->assertFalse($chart->stacked());
+        $this->assertSame('true', $chart->showLegend());
+        $this->assertTrue($chart->showXAxisLabels());
+        $this->assertTrue($chart->showYAxisLabels());
+        $this->assertSame([
+            'states' => [
+                'hover' => [
+                    'filter' => [
+                        'type' => LarapexChart::STATE_LIGHTEN,
+                    ],
+                ],
+                'active' => [
+                    'allowMultipleDataPointsSelection' => false,
+                    'filter' => [
+                        'type' => LarapexChart::STATE_DARKEN,
+                    ],
+                ],
+            ],
+        ], $chart->states());
+    }
+
+    #[Test]
+    public function it_tests_larapex_chart_fluent_setters_update_readable_state(): void
+    {
+        $chart = (new LarapexChart)
+            ->setFontFamily('Inter, sans-serif')
+            ->setFontColor('#101010')
+            ->setTitle('Revenue')
+            ->setSubtitle('Quarterly', 'right')
+            ->setHeight(360)
+            ->setWidth(720)
+            ->setMonochromeColor('#abcdef')
+            ->setHorizontal(true)
+            ->setXAxis(['2024-01-01', '2024-02-01'], 'datetime')
+            ->setYAxis(10, 20)
+            ->setGrid('#111111', 0.5, 3)
+            ->setMarkers([], 6, 9)
+            ->setStroke(4)
+            ->setToolbar(true, false)
+            ->setDataLabels(true)
+            ->setSparkline(true)
+            ->setStacked(true)
+            ->setShowLegend(false)
+            ->setShowXAxisLabels(false)
+            ->setShowYAxisLabels(false)
+            ->setStatesHover(LarapexChart::STATE_NONE)
+            ->setStatesActive(LarapexChart::STATE_LIGHTEN, true);
+
+        $this->assertSame('Inter, sans-serif', $chart->fontFamily());
+        $this->assertSame('#101010', $chart->foreColor());
+        $this->assertSame('Revenue', $chart->title());
+        $this->assertSame('Quarterly', $chart->subtitle());
+        $this->assertSame('right', $chart->subtitlePosition());
+        $this->assertSame(360, $chart->height());
+        $this->assertSame('720', $chart->width());
+        $this->assertSame(['#abcdef'], json_decode($chart->colors(), true));
+        $this->assertSame(['horizontal' => true], json_decode($chart->horizontal(), true));
+        $this->assertSame([
+            'type' => 'datetime',
+            'categories' => ['2024-01-01', '2024-02-01'],
+            'labels' => ['show' => true],
+        ], json_decode($chart->xAxis(), true));
+        $this->assertSame(['min' => 10, 'max' => 20, 'tickAmount' => 20, 'show' => true], json_decode($chart->yAxis(), true));
+        $this->assertSame([
+            'show' => true,
+            'strokeDashArray' => 3,
+            'row' => [
+                'colors' => ['#111111', 'transparent'],
+                'opacity' => 0.5,
+            ],
+        ], json_decode($chart->grid(), true));
+        $this->assertSame([
+            'size' => 6,
+            'colors' => config('larapex-charts.colors'),
+            'strokeColors' => '#fff',
+            'strokeWidth' => 3,
+            'hover' => ['size' => 9],
+        ], json_decode($chart->markers(), true));
+        $this->assertSame([
+            'show' => true,
+            'width' => 4,
+            'colors' => config('larapex-charts.colors'),
+            'curve' => 'straight',
+        ], json_decode($chart->stroke(), true));
+        $this->assertSame(['show' => true], json_decode($chart->toolbar(), true));
+        $this->assertSame(['enabled' => false], json_decode($chart->zoom(), true));
+        $this->assertSame(['enabled' => true], json_decode($chart->dataLabels(), true));
+        $this->assertSame(['enabled' => true], json_decode($chart->sparkline(), true));
+        $this->assertTrue($chart->stacked());
+        $this->assertSame('false', $chart->showLegend());
+        $this->assertFalse($chart->showXAxisLabels());
+        $this->assertFalse($chart->showYAxisLabels());
+        $this->assertSame([
+            'states' => [
+                'hover' => [
+                    'filter' => [
+                        'type' => LarapexChart::STATE_NONE,
+                    ],
+                ],
+                'active' => [
+                    'allowMultipleDataPointsSelection' => true,
+                    'filter' => [
+                        'type' => LarapexChart::STATE_LIGHTEN,
+                    ],
+                ],
+            ],
+        ], $chart->states());
+    }
+
+    #[Test]
+    public function it_tests_simple_chart_add_data_replaces_dataset_with_flat_series(): void
+    {
+        $chart = (new LarapexChart)->pieChart()
+            ->setDataset([1, 2, 3])
+            ->addData([10, 20, 30]);
+
+        $this->assertSame([10, 20, 30], json_decode($chart->dataset(), true));
+    }
+
+    #[Test]
+    public function it_tests_complex_chart_add_data_appends_named_series(): void
+    {
+        $chart = (new LarapexChart)->lineChart()
+            ->addData([10, 20], 'Users')
+            ->addData([30, 40]);
+
+        $this->assertSame([
+            [
+                'name' => 'Users',
+                'data' => [10, 20],
+            ],
+            [
+                'name' => '',
+                'data' => [30, 40],
+            ],
+        ], json_decode($chart->dataset(), true));
+    }
+
+    #[Test]
+    public function it_tests_horizontal_bar_factory_sets_bar_type_and_horizontal_option(): void
+    {
+        $chart = (new LarapexChart)->horizontalBarChart();
+
+        $this->assertSame('bar', $chart->type());
+        $this->assertSame(['horizontal' => true], json_decode($chart->horizontal(), true));
+    }
+
+    #[Test]
+    public function it_tests_transform_labels_filters_empty_string_values(): void
+    {
+        $chart = new LarapexChart;
+
+        $this->assertSame('["\"Jan\",\"Mar\""]', $chart->transformLabels(['Jan', '', null, 'Mar', 0, false]));
+    }
 }
