@@ -38,7 +38,7 @@ composer test
 vendor/bin/phpunit
 ```
 
-Run PHPStan static analysis at level 5:
+Run PHPStan static analysis at level 8:
 
 ```bash
 composer test:types
@@ -117,7 +117,7 @@ testing both command fallback and publish behavior.
 ## Testing Strategy
 
 - Tests use PHPUnit with Orchestra Testbench and `vendor/autoload.php`.
-- PHPStan is configured at level 5 in `phpstan.neon.dist`; run it with
+- PHPStan is configured at level 8 in `phpstan.neon.dist`; run it with
   `composer test:types`.
 - `tests/TestCase.php` registers the provider and facade alias, using in-memory
   SQLite.
