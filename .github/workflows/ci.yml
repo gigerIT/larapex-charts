@@ -72,4 +72,6 @@ jobs:
       - name: Create release pull request or GitHub release
         uses: googleapis/release-please-action@v5
         with:
-          release-type: php
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

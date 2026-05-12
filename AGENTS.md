@@ -254,6 +254,8 @@ publish behavior.
   auto-discovery.
 - `phpunit.xml.dist` for PHPUnit configuration.
 - `.github/workflows/ci.yml` for the CI matrix and Release Please automation.
+- `release-please-config.json` and `.release-please-manifest.json` for Release
+  Please package configuration and the current release baseline.
 - `config/larapex-charts.php` for configurable package defaults.
 - `src/LarapexChart.php` for the fluent chart API and output builders.
 - `src/LarapexChartsServiceProvider.php` for bindings, publish tags, and views.
