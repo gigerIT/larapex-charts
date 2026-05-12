@@ -118,6 +118,11 @@ If no suitable repo-owned skill exists yet, create one when the scoped knowledge
 **Quality standard**  
 Keep `./AGENTS.md` high-signal, concise, and durable. Summarize, deduplicate, and prune stale, narrow, or module-specific entries so it remains broadly useful without wasting tokens.
 
+Keep `README.md` current with user-facing behavior. When a task changes public
+APIs, install/config steps, examples, generated output, publishable assets,
+commands, supported versions, or documented behavior, inspect `README.md` in the
+same task and update it if it would otherwise become stale.
+
 Keep skills focused, practical, and scoped. Each skill should help an agent work better in a defined area without duplicating broad project rules or trivial code details.
 
 Keep code comments minimal but meaningful. Only comment information that is not already clear from clean code, naming, typing, or structure.
@@ -128,6 +133,8 @@ Before creating new documentation, check whether the relevant guidance already e
 Before finalizing any task, explicitly verify all of the following:
 
 - whether `./AGENTS.md` needs an update
+- whether `README.md` remains accurate for any user-facing changes, and was
+  updated when needed
 - whether any existing repo-owned skill in `./.agents/skills` affected by the task was reviewed and updated if needed
 - whether a new repo-owned skill in `./.agents/skills` is needed for newly introduced scoped knowledge
 - whether local code comments are needed for non-obvious implementation details
