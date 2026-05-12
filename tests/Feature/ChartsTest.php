@@ -497,6 +497,8 @@ class ChartsTest extends TestCase
     public function it_tests_di_injected_instance_produces_independent_charts(): void
     {
         // Simulates: public function __construct(LarapexChart $chart) { $this->chart = $chart; }
+        self::assertNotNull($this->app);
+
         $shared = $this->app->make(LarapexChart::class);
 
         // Two charts created from the same DI-injected instance
