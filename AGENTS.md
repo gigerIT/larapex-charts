@@ -45,6 +45,13 @@ composer test:types
 vendor/bin/phpstan analyse --memory-limit=1G
 ```
 
+Run Rector in dry-run mode:
+
+```bash
+composer refactor -- --dry-run
+vendor/bin/rector --dry-run
+```
+
 Generate HTML coverage:
 
 ```bash
@@ -65,7 +72,7 @@ vendor/bin/phpunit
 ```
 
 > TODO: No formatter, linter, dev server, debug command, or deploy command is
-> configured.
+> configured. Rector is configured as an automated refactoring tool.
 
 ## Code Style & Conventions
 

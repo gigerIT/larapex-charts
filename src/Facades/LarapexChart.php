@@ -1,20 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ArielMejiaDev\LarapexCharts\Facades;
 
+use ArielMejiaDev\LarapexCharts\PieChart;
+use ArielMejiaDev\LarapexCharts\DonutChart;
+use ArielMejiaDev\LarapexCharts\RadialChart;
+use ArielMejiaDev\LarapexCharts\PolarAreaChart;
+use ArielMejiaDev\LarapexCharts\LineChart;
+use ArielMejiaDev\LarapexCharts\AreaChart;
+use ArielMejiaDev\LarapexCharts\BarChart;
+use ArielMejiaDev\LarapexCharts\HorizontalBar;
+use ArielMejiaDev\LarapexCharts\HeatMapChart;
+use ArielMejiaDev\LarapexCharts\RadarChart;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static \ArielMejiaDev\LarapexCharts\PieChart pieChart()
- * @method static \ArielMejiaDev\LarapexCharts\DonutChart donutChart()
- * @method static \ArielMejiaDev\LarapexCharts\RadialChart radialChart()
- * @method static \ArielMejiaDev\LarapexCharts\PolarAreaChart polarAreaChart()
- * @method static \ArielMejiaDev\LarapexCharts\LineChart lineChart()
- * @method static \ArielMejiaDev\LarapexCharts\AreaChart areaChart()
- * @method static \ArielMejiaDev\LarapexCharts\BarChart barChart()
- * @method static \ArielMejiaDev\LarapexCharts\HorizontalBar horizontalBarChart()
- * @method static \ArielMejiaDev\LarapexCharts\HeatMapChart heatMapChart()
- * @method static \ArielMejiaDev\LarapexCharts\RadarChart radarChart()
+ * @method static PieChart pieChart()
+ * @method static DonutChart donutChart()
+ * @method static RadialChart radialChart()
+ * @method static PolarAreaChart polarAreaChart()
+ * @method static LineChart lineChart()
+ * @method static AreaChart areaChart()
+ * @method static BarChart barChart()
+ * @method static HorizontalBar horizontalBarChart()
+ * @method static HeatMapChart heatMapChart()
+ * @method static RadarChart radarChart()
  */
 class LarapexChart extends Facade
 {

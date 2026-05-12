@@ -1,16 +1,22 @@
-<?php namespace ArielMejiaDev\LarapexCharts\Tests\Unit;
+<?php
+
+declare(strict_types=1);
+
+namespace ArielMejiaDev\LarapexCharts\Tests\Unit;
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\File;
+use Illuminate\Testing\PendingCommand;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\Tests\TestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-class ChartsTest extends TestCase
+final class ChartsTest extends TestCase
 {
     #[Test]
     public function it_tests_larapex_charts_install_add_chart_stubs(): void
     {
-        Artisan::call('vendor:publish', ['--all' => true]);
+        Artisan::call('vendor:publish', ['--all' => true, '--force' => true]);
 
         $chartTypes = collect([
             'PieChart',
@@ -25,17 +31,17 @@ class ChartsTest extends TestCase
             'RadarChart',
         ]);
 
-        $chartTypes->each(function ($chart) {
+        $chartTypes->each(function ($chart): void {
             $this->assertFileExists(
-                base_path("stubs/charts/Default/{$chart}.stub")
+                base_path(sprintf('stubs/charts/Default/%s.stub', $chart))
             );
 
             $this->assertFileExists(
-                base_path("stubs/charts/Vue/{$chart}.stub")
+                base_path(sprintf('stubs/charts/Vue/%s.stub', $chart))
             );
 
             $this->assertFileExists(
-                base_path("stubs/charts/Json/{$chart}.stub")
+                base_path(sprintf('stubs/charts/Json/%s.stub', $chart))
             );
         });
     }
@@ -49,7 +55,7 @@ class ChartsTest extends TestCase
             ->setDataset([150, 120])
             ->setLabels([__('Published'), __('No Published')]);
 
-        $this->assertEquals($chart->dataset(), $chart->script()['chart']->dataset());
+        $this->assertEquals($chart->dataset(), $chart->script()->getData()['chart']->dataset());
     }
 
     #[Test]
@@ -58,13 +64,46 @@ class ChartsTest extends TestCase
         $chart = (new LarapexChart)->setTitle('Posts')->setXAxis(['Jan', 'Feb', 'Mar'])->setDataset([150, 120]);
         $oldColors = $chart->colors();
         $chart->setColors(['#fe9700', '#607c8a']);
-        $this->assertNotEquals($oldColors, $chart->colors());
+        $this->assertNotSame($oldColors, $chart->colors());
     }
 
     #[Test]
     public function it_tests_larapex_chart_cdn_returns_a_correct_url(): void
     {
-        $this->assertEquals('https://cdn.jsdelivr.net/npm/apexcharts' , (new LarapexChart)->cdn());
+        $this->assertSame('https://cdn.jsdelivr.net/npm/apexcharts' , (new LarapexChart)->cdn());
+    }
+
+    #[Test]
+    public function it_tests_make_chart_generates_json_chart_from_package_fallback_stub(): void
+    {
+        $path = app_path('Charts/SalesChart.php');
+        File::delete($path);
+        File::deleteDirectory(base_path('stubs/charts'));
+
+        $command = $this->artisan('make:chart', ['name' => 'SalesChart', '--json' => true]);
+        $this->assertInstanceOf(PendingCommand::class, $command);
+
+        $command
+            ->expectsChoice('Select a chart type', 'Line Chart', [
+                'Pie Chart',
+                'Donut Chart',
+                'Radial Bar Chart',
+                'Polar Area Chart',
+                'Line Chart',
+                'Area Chart',
+                'Bar Chart',
+                'Horizontal Bar Chart',
+                'Heatmap Chart',
+                'Radar Chart',
+            ])
+            ->assertExitCode(0);
+        $command->run();
+
+        $this->assertFileExists($path);
+        $this->assertStringContainsString('class SalesChart', File::get($path));
+        $this->assertStringContainsString('->lineChart()', File::get($path));
+        $this->assertStringContainsString("->addData([40, 93, 35, 42, 18, 82], 'Physical sales')", File::get($path));
+        $this->assertStringContainsString('->toJson()', File::get($path));
     }
 
     #[Test]
@@ -125,7 +164,7 @@ class ChartsTest extends TestCase
             ->setTitle('Revenue')
             ->setSubtitle('Quarterly', 'right')
             ->setHeight(360)
-            ->setWidth(720)
+            ->setWidth('75%')
             ->setMonochromeColor('#abcdef')
             ->setHorizontal(true)
             ->setXAxis(['2024-01-01', '2024-02-01'], 'datetime')
@@ -149,7 +188,7 @@ class ChartsTest extends TestCase
         $this->assertSame('Quarterly', $chart->subtitle());
         $this->assertSame('right', $chart->subtitlePosition());
         $this->assertSame(360, $chart->height());
-        $this->assertSame('720', $chart->width());
+        $this->assertSame('75%', $chart->width());
         $this->assertSame(['#abcdef'], json_decode($chart->colors(), true));
         $this->assertSame(['horizontal' => true], json_decode($chart->horizontal(), true));
         $this->assertSame([
@@ -248,5 +287,26 @@ class ChartsTest extends TestCase
         $chart = new LarapexChart;
 
         $this->assertSame('["\"Jan\",\"Mar\""]', $chart->transformLabels(['Jan', '', null, 'Mar', 0, false]));
+    }
+
+    #[Test]
+    public function it_tests_set_options_replaces_nested_default_values(): void
+    {
+        $chart = (new LarapexChart)->setOptions([
+            'chart' => [
+                'height' => 240,
+            ],
+            'title' => [
+                'text' => 'Overridden',
+            ],
+            'colors' => ['#abc'],
+        ]);
+
+        $options = $chart->getOptions();
+
+        $this->assertSame(240, $options['chart']['height']);
+        $this->assertSame('donut', $options['chart']['type']);
+        $this->assertSame('Overridden', $options['title']['text']);
+        $this->assertSame(['#abc'], $options['colors']);
     }
 }

@@ -1,37 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace ArielMejiaDev\LarapexCharts;
 
+use ArielMejiaDev\LarapexCharts\Console\ChartMakeCommand;
 use Illuminate\Support\ServiceProvider;
 
 class LarapexChartsServiceProvider extends ServiceProvider
 {
 
     /**
-     * Before laravel app get all providers and methods of laravel running 
+     * Before laravel app get all providers and methods of laravel running
      * The package must register the service to access to package class service container and Facade
-     *
-     * @return void
      */
-    public function register()
+    #[\Override]
+    public function register(): void
     {
-        $this->app->bind('larapex-chart', function () {
-            return new LarapexChart;
-        });
+        $this->app->bind('larapex-chart', fn(): LarapexChart => new LarapexChart);
 
         $this->mergeConfigFrom($this->packageBasePath('config/larapex-charts.php'), 'larapex-charts');
 
         $this->commands([
-            \ArielMejiaDev\LarapexCharts\Console\ChartMakeCommand::class,
+            ChartMakeCommand::class,
         ]);
     }
 
     /**
      * When this method is apply we have all laravel providers and methods available
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->loadViewsFrom($this->packageBasePath('stubs/resources/views'), 'larapex-charts');
 

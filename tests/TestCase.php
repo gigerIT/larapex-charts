@@ -1,14 +1,28 @@
-<?php namespace ArielMejiaDev\LarapexCharts\Tests;
+<?php
 
+declare(strict_types=1);
+
+namespace ArielMejiaDev\LarapexCharts\Tests;
+
+use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
+use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as TestbenchTestCase;
 use ArielMejiaDev\LarapexCharts\LarapexChartsServiceProvider;
+use Illuminate\Support\Facades\File;
 
 class TestCase extends TestbenchTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        File::deleteDirectory(resource_path('views/vendor/larapex-charts'));
+    }
+
     /**
      * Sets the env data to interact as env file values
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      */
     protected function getEnvironmentSetUp($app): void
     {
@@ -31,7 +45,7 @@ class TestCase extends TestbenchTestCase
     protected function getPackageAliases($app): array
     {
         return [
-            'LarapexChart' => \ArielMejiaDev\LarapexCharts\Facades\LarapexChart::class
+            'LarapexChart' => LarapexChart::class
         ];
     }
 

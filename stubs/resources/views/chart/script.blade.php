@@ -1,60 +1,11 @@
 <script>
     (function() {
-        var options =
-        {
-            chart: {
-                id: '{!! $chart->id() !!}',
-                type: '{!! $chart->type() !!}',
-                height: {!! $chart->height() !!},
-                width: '{!! $chart->width() !!}',
-                toolbar: {!! $chart->toolbar() !!},
-                zoom: {!! $chart->zoom() !!},
-                fontFamily: '{!! $chart->fontFamily() !!}',
-                foreColor: '{!! $chart->foreColor() !!}',
-                sparkline: {!! $chart->sparkline() !!},
-                @if($chart->stacked())
-                stacked: {!! $chart->stacked() !!},
-                @endif
-            },
-            plotOptions: {
-                bar: {!! $chart->horizontal() !!}
-            },
-            colors: {!! $chart->colors() !!},
-            series: {!! $chart->dataset() !!},
-            dataLabels: {!! $chart->dataLabels() !!},
-            @if($chart->labels())
+        var options = {!! \Illuminate\Support\Js::from($chart->toScriptOptions()) !!};
+        var chart = new ApexCharts(
+            document.querySelector({!! \Illuminate\Support\Js::from('#' . $chart->id()) !!}),
+            options
+        );
 
-                labels: {!! json_encode($chart->labels(), true) !!},
-            @endif
-            title: {
-                text: "{!! $chart->title() !!}"
-            },
-            subtitle: {
-                text: '{!! $chart->subtitle() !!}',
-                align: '{!! $chart->subtitlePosition() !!}'
-            },
-            xaxis: {!! $chart->xAxis() !!},
-            @if ($chart->yAxis())
-                yaxis: {!! $chart->yAxis() !!},
-            @else
-                yaxis: {
-                    labels : {
-                        show: {!! json_encode($chart->showYAxisLabels(), true) !!},
-                    }
-                },
-            @endif
-            grid: {!! $chart->grid() !!},
-            markers: {!! $chart->markers() !!},
-            @if($chart->stroke())
-                stroke: {!! $chart->stroke() !!},
-            @endif
-            legend: {
-                show: {!! $chart->showLegend() !!}
-            },
-            states: {!! json_encode($chart->states()['states']) !!}
-        }
-
-        var chart = new ApexCharts(document.querySelector("#{!! $chart->id() !!}"), options);
         chart.render();
     })();
 </script>

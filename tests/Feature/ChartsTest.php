@@ -1,19 +1,24 @@
-<?php namespace ArielMejiaDev\LarapexCharts\Tests\Feature;
+<?php
 
+declare(strict_types=1);
+
+namespace ArielMejiaDev\LarapexCharts\Tests\Feature;
+
+use Illuminate\Foundation\Application;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\Tests\TestCase;
 use ArielMejiaDev\LarapexCharts\Facades\LarapexChart as LarapexChartFacade;
 use PHPUnit\Framework\Attributes\Test;
 
-class ChartsTest extends TestCase
+final class ChartsTest extends TestCase
 {
     #[Test]
     public function it_tests_larapex_charts_can_render_pie_charts_by_default(): void
     {
         $chart = (new LarapexChart)->setTitle('Users Test Chart');
-        $this->assertEquals('donut', $chart->type());
+        $this->assertSame('donut', $chart->type());
         $anotherChart = (new LarapexChart)->areaChart();
-        $this->assertEquals('area', $anotherChart->type());
+        $this->assertSame('area', $anotherChart->type());
     }
 
     #[Test]
@@ -26,8 +31,8 @@ class ChartsTest extends TestCase
             ->setXAxis(['Jan', 'Feb', 'Mar'])
             ->setDataset([150, 120]);
 
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('pie', $chart->type());
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('pie', $chart->type());
     }
 
     #[Test]
@@ -38,8 +43,8 @@ class ChartsTest extends TestCase
             ->setXAxis(['Jan', 'Feb', 'Mar'])
             ->setDataset([150, 120]);
 
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('donut', $chart->type());
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('donut', $chart->type());
     }
 
     #[Test]
@@ -50,8 +55,8 @@ class ChartsTest extends TestCase
             ->setXAxis(['Jan', 'Feb', 'Mar'])
             ->setDataset([60, 40, 79]);
 
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('radialBar', $chart->type());
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('radialBar', $chart->type());
     }
 
     #[Test]
@@ -62,8 +67,8 @@ class ChartsTest extends TestCase
             ->setXAxis(['Jan', 'Feb', 'Mar'])
             ->setDataset([60, 40, 79]);
 
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('polarArea', $chart->type());
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('polarArea', $chart->type());
     }
 
     #[Test]
@@ -85,9 +90,9 @@ class ChartsTest extends TestCase
             ->setGrid(true)
             ->setStroke(1);
 
-        $this->assertEquals($chart->id(), $chart->container()['id']);
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('line', $chart->type());
+        $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('line', $chart->type());
     }
 
     #[Test]
@@ -110,9 +115,9 @@ class ChartsTest extends TestCase
                 ]
             ]);
 
-        $this->assertEquals($chart->id(), $chart->container()['id']);
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('area', $chart->type());
+        $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('area', $chart->type());
     }
 
     #[Test]
@@ -148,9 +153,9 @@ class ChartsTest extends TestCase
                 ]
             ]);
 
-        $this->assertEquals($chart->id(), $chart->container()['id']);
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('bar', $chart->type());
+        $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('bar', $chart->type());
     }
 
     #[Test]
@@ -175,9 +180,9 @@ class ChartsTest extends TestCase
                 ]
             ]);
 
-        $this->assertEquals($chart->id(), $chart->container()['id']);
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('bar', $chart->type());
+        $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('bar', $chart->type());
         $this->assertTrue($chart->stacked());
     }
 
@@ -203,9 +208,9 @@ class ChartsTest extends TestCase
                 ]
             ]);
 
-        $this->assertEquals($chart->id(), $chart->container()['id']);
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('bar', $chart->type());
+        $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('bar', $chart->type());
         $chartHorizontalOrientation = json_decode($chart->horizontal(), true)['horizontal'];
         $this->assertTrue($chartHorizontalOrientation);
     }
@@ -229,9 +234,9 @@ class ChartsTest extends TestCase
                 ]
             ]);
 
-        $this->assertEquals($chart->id(), $chart->container()['id']);
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('heatmap', $chart->type());
+        $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('heatmap', $chart->type());
     }
     
     #[Test]
@@ -253,9 +258,9 @@ class ChartsTest extends TestCase
                 ]
             ]);
 
-        $this->assertEquals($chart->id(), $chart->container()['id']);
-        $this->assertEquals($chart, $chart->script()['chart']);
-        $this->assertEquals('radar', $chart->type());
+        $this->assertEquals($chart->id(), $chart->container()->getData()['id']);
+        $this->assertEquals($chart, $chart->script()->getData()['chart']);
+        $this->assertSame('radar', $chart->type());
     }
 
     #[Test]
@@ -445,28 +450,48 @@ class ChartsTest extends TestCase
         $chart = $this->chartWithConfiguredOutputOptions();
 
         $script = $chart->script()->render();
+        $options = $chart->toScriptOptions();
 
-        $this->assertSame(1, substr_count($script, 'yaxis:'));
-        $this->assertStringContainsString("id: '{$chart->id()}'", $script);
-        $this->assertStringContainsString("type: 'bar'", $script);
-        $this->assertStringContainsString('height: 320', $script);
-        $this->assertStringContainsString("width: '640'", $script);
-        $this->assertStringContainsString('toolbar: {"show":true}', $script);
-        $this->assertStringContainsString('zoom: {"enabled":false}', $script);
-        $this->assertStringContainsString('sparkline: {"enabled":true}', $script);
-        $this->assertStringContainsString('stacked: 1', $script);
-        $this->assertStringContainsString('colors: ["#111111","#222222"]', $script);
-        $this->assertStringContainsString('series: [{"name":"Revenue","data":[10,20]}]', $script);
-        $this->assertStringContainsString('dataLabels: {"enabled":true}', $script);
-        $this->assertStringContainsString('labels: ["North","South"]', $script);
-        $this->assertStringContainsString('xaxis: {"type":"category","categories":["Jan","Feb"],"labels":{"show":true}}', $script);
-        $this->assertStringContainsString('yaxis: {"min":0,"max":100,"tickAmount":5,"show":false}', $script);
-        $this->assertStringContainsString('grid: {"show":false}', $script);
-        $this->assertStringContainsString('markers: {"show":false}', $script);
-        $this->assertStringContainsString('stroke: {"show":true,"width":2,"colors":["#333333"],"curve":"smooth"}', $script);
-        $this->assertStringContainsString('show: false', $script);
-        $this->assertStringContainsString('"hover":{"filter":{"type":"none"}}', $script);
-        $this->assertStringContainsString('"active":{"allowMultipleDataPointsSelection":true,"filter":{"type":"lighten"}}', $script);
+        $this->assertSame(1, substr_count($script, '\\u0022yaxis\\u0022'));
+        $this->assertStringContainsString('var options = JSON.parse(', $script);
+        $this->assertSame($chart->id(), $options['chart']['id']);
+        $this->assertSame('bar', $options['chart']['type']);
+        $this->assertSame(320, $options['chart']['height']);
+        $this->assertSame('640', $options['chart']['width']);
+        $this->assertEquals((object) ['show' => true], $options['chart']['toolbar']);
+        $this->assertEquals((object) ['enabled' => false], $options['chart']['zoom']);
+        $this->assertEquals((object) ['enabled' => true], $options['chart']['sparkline']);
+        $this->assertTrue($options['chart']['stacked']);
+        $this->assertEquals(['bar' => (object) ['horizontal' => true]], $options['plotOptions']);
+        $this->assertSame(['#111111', '#222222'], $options['colors']);
+        $this->assertEquals([(object) ['name' => 'Revenue', 'data' => [10, 20]]], $options['series']);
+        $this->assertEquals((object) ['enabled' => true], $options['dataLabels']);
+        $this->assertSame(['North', 'South'], $options['labels']);
+        $this->assertEquals((object) ['min' => 0, 'max' => 100, 'tickAmount' => 5, 'show' => false], $options['yaxis']);
+        $this->assertFalse($options['legend']['show']);
+        $this->assertSame(LarapexChart::STATE_NONE, $options['states']['hover']['filter']['type']);
+        $this->assertSame(LarapexChart::STATE_LIGHTEN, $options['states']['active']['filter']['type']);
+    }
+
+    #[Test]
+    public function it_tests_script_render_json_encodes_user_content_safely(): void
+    {
+        $chart = (new LarapexChart)->barChart()
+            ->setTitle('Revenue </script><script>alert("x")</script>')
+            ->setSubtitle("Quarter's \"best\"")
+            ->setXAxis(['Jan </script>', 'Feb'])
+            ->setLabels(['North <region>', 'South & West'])
+            ->addData([10, 20], 'Revenue');
+
+        $script = $chart->script()->render();
+
+        $this->assertStringContainsString('var options = JSON.parse(', $script);
+        $this->assertStringContainsString('new ApexCharts(', $script);
+        $this->assertStringNotContainsString('</script><script>alert("x")</script>', $script);
+        $this->assertStringNotContainsString('Jan </script>', $script);
+        $this->assertStringContainsString('\\u003C', $script);
+        $this->assertStringContainsString('\\u003E', $script);
+        $this->assertStringContainsString('Quarter', $script);
     }
 
     private function chartWithConfiguredOutputOptions(): LarapexChart
@@ -497,7 +522,7 @@ class ChartsTest extends TestCase
     public function it_tests_di_injected_instance_produces_independent_charts(): void
     {
         // Simulates: public function __construct(LarapexChart $chart) { $this->chart = $chart; }
-        self::assertNotNull($this->app);
+        $this->assertInstanceOf(Application::class, $this->app);
 
         $shared = $this->app->make(LarapexChart::class);
 

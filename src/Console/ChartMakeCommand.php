@@ -41,6 +41,7 @@ class ChartMakeCommand extends GeneratorCommand
         $this->selectedChart = $this->chartTypes[$option];
     }
 
+    #[\Override]
     public function handle(): ?bool
     {
         $this->askChartType();
@@ -70,8 +71,6 @@ class ChartMakeCommand extends GeneratorCommand
 
     /**
      * Get the stub file for the generator.
-     *
-     * @return string
      */
     protected function getStub(): string
     {
@@ -85,7 +84,7 @@ class ChartMakeCommand extends GeneratorCommand
             $directory = 'Json';
         }
 
-        $stub = "{$directory}/{$this->selectedChart}.stub";
+        $stub = sprintf('%s/%s.stub', $directory, $this->selectedChart);
 
         return $this->resolveStubPath($stub);
     }
@@ -95,8 +94,8 @@ class ChartMakeCommand extends GeneratorCommand
      *
      * @param  string  $stub
      * @param  string  $name
-     * @return string
      */
+    #[\Override]
     protected function replaceClass($stub, $name): string
     {
         $stub = parent::replaceClass($stub, $name);
@@ -110,8 +109,8 @@ class ChartMakeCommand extends GeneratorCommand
      * Get the default namespace for the class.
      *
      * @param  string  $rootNamespace
-     * @return string
      */
+    #[\Override]
     protected function getDefaultNamespace($rootNamespace): string
     {
         return $rootNamespace . '\Charts';
@@ -122,6 +121,7 @@ class ChartMakeCommand extends GeneratorCommand
      *
      * @return list<array{string, int, string}>
      */
+    #[\Override]
     protected function getArguments(): array
     {
         return [
@@ -134,6 +134,7 @@ class ChartMakeCommand extends GeneratorCommand
      *
      * @return list<array{string, string, int, string}>
      */
+    #[\Override]
     protected function getOptions(): array
     {
         return [

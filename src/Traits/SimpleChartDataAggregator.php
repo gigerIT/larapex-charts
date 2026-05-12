@@ -4,8 +4,6 @@
 namespace ArielMejiaDev\LarapexCharts\Traits;
 
 
-use ArielMejiaDev\LarapexCharts\LarapexChart;
-
 trait SimpleChartDataAggregator
 {
     /**
