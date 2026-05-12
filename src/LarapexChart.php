@@ -547,16 +547,16 @@ class LarapexChart
         $options = [
             'chart' => $chartOptions,
             'plotOptions' => [
-                'bar' => json_decode($this->horizontal()),
+                'bar' => $this->decode($this->horizontal()),
             ],
-            'colors' => json_decode($this->colors()),
+            'colors' => $this->decode($this->colors()),
         ];
 
         if($includeSeries) {
-            $options['series'] = json_decode($this->dataset());
+            $options['series'] = $this->decode($this->dataset());
         }
 
-        $options['dataLabels'] = json_decode($this->dataLabels());
+        $options['dataLabels'] = $this->decode($this->dataLabels());
         $options['theme'] = [
             'mode' => $this->theme
         ];
@@ -567,14 +567,14 @@ class LarapexChart
             'text' => $this->subtitle() ? $this->subtitle() : '',
             'align' => $this->subtitlePosition() ? $this->subtitlePosition() : '',
         ];
-        $options['xaxis'] = json_decode($this->xAxis());
+        $options['xaxis'] = $this->decode($this->xAxis());
         $options['yaxis'] = [
             'labels' => [
                 'show' => $this->showYAxisLabels(),
             ]
         ];
-        $options['grid'] = json_decode($this->grid());
-        $options['markers'] = json_decode($this->markers());
+        $options['grid'] = $this->decode($this->grid());
+        $options['markers'] = $this->decode($this->markers());
         $options['legend'] = [
             'show' => $this->showLegend()
         ];
@@ -585,29 +585,53 @@ class LarapexChart
         }
 
         if($this->stroke()) {
-            $options['stroke'] = json_decode($this->stroke());
+            $options['stroke'] = $this->decode($this->stroke());
         }
         if($this->yAxis()) {
-            $options['yaxis'] = json_decode($this->yAxis());
+            $options['yaxis'] = $this->decode($this->yAxis());
         }
 
         return $options;
     }
 
-    public function toJson(): \Illuminate\Http\JsonResponse
+    private function jsonChartOptions(): array
     {
-        $options = $this->apexOptions([
+        return [
             'id' => $this->id(),
             'type' => $this->type(),
             'height' => $this->height(),
             'width' => $this->width(),
-            'toolbar' => json_decode($this->toolbar()),
-            'zoom' => json_decode($this->zoom()),
-            'fontFamily' => json_decode($this->fontFamily()),
+            'toolbar' => $this->decode($this->toolbar()),
+            'zoom' => $this->decode($this->zoom()),
+            'fontFamily' => $this->decode($this->fontFamily()),
             'foreColor' => $this->foreColor(),
             'sparkline' => $this->sparkline(),
             'stacked' => $this->stacked(),
-        ], true);
+        ];
+    }
+
+    private function vueChartOptions(): array
+    {
+        return [
+            'id' => $this->id(),
+            'height' => $this->height(),
+            'toolbar' => $this->decode($this->toolbar()),
+            'zoom' => $this->decode($this->zoom()),
+            'fontFamily' => $this->decode($this->fontFamily()),
+            'foreColor' => $this->foreColor(),
+            'sparkline' => $this->decode($this->sparkline()),
+            'stacked' => $this->stacked(),
+        ];
+    }
+
+    private function decode($encoded): mixed
+    {
+        return json_decode($encoded);
+    }
+
+    public function toJson(): \Illuminate\Http\JsonResponse
+    {
+        $options = $this->apexOptions($this->jsonChartOptions(), true);
 
         return response()->json([
             'id' => $this->id(),
@@ -623,23 +647,14 @@ class LarapexChart
 
     public function toVue() :array
     {
-        $options = $this->apexOptions([
-            'id' => $this->id(),
-            'height' => $this->height(),
-            'toolbar' => json_decode($this->toolbar()),
-            'zoom' => json_decode($this->zoom()),
-            'fontFamily' => json_decode($this->fontFamily()),
-            'foreColor' => $this->foreColor(),
-            'sparkline' => json_decode($this->sparkline()),
-            'stacked' => $this->stacked(),
-        ]);
+        $options = $this->apexOptions($this->vueChartOptions());
 
         return [
             'height' => $this->height(),
             'width' => $this->width(),
             'type' => $this->type(),
             'options' => $options,
-            'series' => json_decode($this->dataset()),
+            'series' => $this->decode($this->dataset()),
         ];
     }
 }

@@ -34,13 +34,14 @@
                 align: '{!! $chart->subtitlePosition() !!}'
             },
             xaxis: {!! $chart->xAxis() !!},
-            yaxis: {
-                labels : {
-                    show: {!! json_encode($chart->showYAxisLabels(), true) !!},
-                }
-            },
             @if ($chart->yAxis())
                 yaxis: {!! $chart->yAxis() !!},
+            @else
+                yaxis: {
+                    labels : {
+                        show: {!! json_encode($chart->showYAxisLabels(), true) !!},
+                    }
+                },
             @endif
             grid: {!! $chart->grid() !!},
             markers: {!! $chart->markers() !!},

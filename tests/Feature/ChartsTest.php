@@ -439,6 +439,36 @@ class ChartsTest extends TestCase
         ], $options['stroke']);
     }
 
+    #[Test]
+    public function it_tests_script_render_preserves_configured_options_without_duplicate_yaxis(): void
+    {
+        $chart = $this->chartWithConfiguredOutputOptions();
+
+        $script = $chart->script()->render();
+
+        $this->assertSame(1, substr_count($script, 'yaxis:'));
+        $this->assertStringContainsString("id: '{$chart->id()}'", $script);
+        $this->assertStringContainsString("type: 'bar'", $script);
+        $this->assertStringContainsString('height: 320', $script);
+        $this->assertStringContainsString("width: '640'", $script);
+        $this->assertStringContainsString('toolbar: {"show":true}', $script);
+        $this->assertStringContainsString('zoom: {"enabled":false}', $script);
+        $this->assertStringContainsString('sparkline: {"enabled":true}', $script);
+        $this->assertStringContainsString('stacked: 1', $script);
+        $this->assertStringContainsString('colors: ["#111111","#222222"]', $script);
+        $this->assertStringContainsString('series: [{"name":"Revenue","data":[10,20]}]', $script);
+        $this->assertStringContainsString('dataLabels: {"enabled":true}', $script);
+        $this->assertStringContainsString('labels: ["North","South"]', $script);
+        $this->assertStringContainsString('xaxis: {"type":"category","categories":["Jan","Feb"],"labels":{"show":true}}', $script);
+        $this->assertStringContainsString('yaxis: {"min":0,"max":100,"tickAmount":5,"show":false}', $script);
+        $this->assertStringContainsString('grid: {"show":false}', $script);
+        $this->assertStringContainsString('markers: {"show":false}', $script);
+        $this->assertStringContainsString('stroke: {"show":true,"width":2,"colors":["#333333"],"curve":"smooth"}', $script);
+        $this->assertStringContainsString('show: false', $script);
+        $this->assertStringContainsString('"hover":{"filter":{"type":"none"}}', $script);
+        $this->assertStringContainsString('"active":{"allowMultipleDataPointsSelection":true,"filter":{"type":"lighten"}}', $script);
+    }
+
     private function chartWithConfiguredOutputOptions(): LarapexChart
     {
         return (new LarapexChart)->barChart()
