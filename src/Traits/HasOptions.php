@@ -1,11 +1,15 @@
 <?php
 namespace ArielMejiaDev\LarapexCharts\Traits;
 trait HasOptions{
-    protected $options;
+    /** @var array<string, mixed>|null */
+    protected ?array $options = null;
+
         /**
      * Get the value of options
+     *
+     * @return array<string, mixed>
      */ 
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options ? array_merge_recursive($this->getDefaultOption() ,$this->options) : $this->getDefaultOption();
     }
@@ -13,16 +17,21 @@ trait HasOptions{
     /**
      * Set the value of options
      *
+     * @param array<string, mixed> $options
      * @return  self
      */ 
-    public function setOptions($options)
+    public function setOptions(array $options): self
     {
         $this->options = $options;
 
         return $this;
     }
 
-    private function getDefaultOption(){
+    /**
+     * @return array<string, mixed>
+     */
+    private function getDefaultOption(): array
+    {
         return [
             'chart' => [
                 'type' => $this->type(),

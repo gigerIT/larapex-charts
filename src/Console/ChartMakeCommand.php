@@ -11,7 +11,8 @@ class ChartMakeCommand extends GeneratorCommand
 {
     use WithModelStub;
 
-    protected $chartTypes = [
+    /** @var array<string, string> */
+    protected array $chartTypes = [
         'Pie Chart' => 'PieChart',
         'Donut Chart' => 'DonutChart',
         'Radial Bar Chart' => 'RadialBarChart',
@@ -24,9 +25,9 @@ class ChartMakeCommand extends GeneratorCommand
         'Radar Chart' => 'RadarChart',
     ];
 
-    protected $selectedChart;
+    protected string $selectedChart;
 
-    protected function askChartType()
+    protected function askChartType(): void
     {
         $option = $this->choice(
             'Select a chart type',
@@ -114,7 +115,7 @@ class ChartMakeCommand extends GeneratorCommand
     /**
      * Get the console command arguments.
      *
-     * @return array
+     * @return list<array{string, int, string}>
      */
     protected function getArguments(): array
     {
@@ -126,7 +127,7 @@ class ChartMakeCommand extends GeneratorCommand
     /**
      * Get the console command options.
      *
-     * @return array
+     * @return list<array{string, string, int, string}>
      */
     protected function getOptions(): array
     {

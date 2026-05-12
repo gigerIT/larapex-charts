@@ -4,7 +4,7 @@ use ArielMejiaDev\LarapexCharts\Traits\HasOptions;
 use Illuminate\Support\Facades\View;
 
 /**
- * @method LarapexChart addData(array $array, ?string $name = null)
+ * @method LarapexChart addData(array<int, mixed> $array, ?string $name = null)
  */
 class LarapexChart
 {
@@ -44,6 +44,7 @@ class LarapexChart
     protected string $subtitle = '';
     protected string $subtitlePosition = 'left';
     protected string $type = 'donut';
+    /** @var array<int, string|int|float> */
     protected array $labels = [];
     protected string $fontFamily;
     protected string $foreColor;
@@ -67,6 +68,7 @@ class LarapexChart
     protected string $theme = 'light';
     protected string $sparkline;
     private string $chartLetters = 'abcdefghijklmnopqrstuvwxyz';
+    /** @var array<string, array<string, bool|array<string, string>>> */
     private array $states = [];
 
     /*
@@ -148,18 +150,27 @@ class LarapexChart
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @param string $fontFamily
+     */
 	public function setFontFamily($fontFamily) :LarapexChart
 	{
 		$this->fontFamily = $fontFamily;
 		return $this;
 	}
 
+    /**
+     * @param string $fontColor
+     */
     public function setFontColor($fontColor) :LarapexChart
     {
         $this->foreColor = $fontColor;
         return $this;
     }
 
+    /**
+     * @param array<int|string, mixed> $dataset
+     */
     public function setDataset(array $dataset): LarapexChart
     {
         $this->dataset = json_encode($dataset);
@@ -178,6 +189,9 @@ class LarapexChart
         return $this;
     }
 
+    /**
+     * @param array<int, string> $colors
+     */
     public function setColors(array $colors) :LarapexChart
     {
         $this->colors = json_encode($colors);
@@ -209,12 +223,18 @@ class LarapexChart
         return $this;
     }
 
+    /**
+     * @param array<int, string|int|float> $labels
+     */
     public function setLabels(array $labels) :LarapexChart
     {
         $this->labels = $labels;
         return $this;
     }
 
+    /**
+     * @param array<int, string|int|float> $categories
+     */
     public function setXAxis(array $categories, string $type = 'category') :LarapexChart
     {   
         $this->xAxis = json_encode([
@@ -228,6 +248,10 @@ class LarapexChart
         return $this;
     }
 
+    /**
+     * @param string|bool $color
+     * @param int|float $opacity
+     */
     public function setGrid($color = '#e5e5e5', $opacity = 0.1, int $strokeDashArray = 5) :LarapexChart
     {
         $this->grid = json_encode([
@@ -242,6 +266,11 @@ class LarapexChart
         return $this;
     }
 
+    /**
+     * @param int|float $min
+     * @param int|float $max
+     * @param bool $show
+     */
     public function setYAxis($min, $max, ?int $tickAmount = null, $show = true) :LarapexChart
     {
         $this->yAxis = json_encode([
@@ -253,6 +282,11 @@ class LarapexChart
         return $this;
     }
 
+    /**
+     * @param array<int, string> $colors
+     * @param int|float $width
+     * @param int|float $hoverSize
+     */
     public function setMarkers($colors = [], $width = 4, $hoverSize = 7) :LarapexChart
     {
         if(empty($colors)) {
@@ -272,6 +306,9 @@ class LarapexChart
         return $this;
     }
 
+    /**
+     * @param array<int, string> $colors
+     */
     public function setStroke(int $width, array $colors = [], string $curve = 'straight') :LarapexChart
     {
         if(empty($colors)) {
@@ -365,6 +402,9 @@ class LarapexChart
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @param array<int, scalar|null> $array
+     */
     public function transformLabels(array $array): bool|string
     {
         $stringArray = array_filter($array, function($string): bool {
@@ -423,6 +463,9 @@ class LarapexChart
         return $this->foreColor;
     }
 
+    /**
+     * @return array<int, string|int|float>
+     */
     public function labels(): array
     {
         return $this->labels;
@@ -517,6 +560,9 @@ class LarapexChart
         return $this->showYAxisLabels;
     }
 
+    /**
+     * @return array{states: array{hover: array{filter: array{type: string}}, active: array{allowMultipleDataPointsSelection: bool, filter: array{type: string}}}}
+     */
     public function states(): array
     {
         return [
@@ -542,6 +588,10 @@ class LarapexChart
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @param array<string, mixed> $chartOptions
+     * @return array<string, mixed>
+     */
     private function apexOptions(array $chartOptions, bool $includeSeries = false): array
     {
         $options = [
@@ -594,6 +644,9 @@ class LarapexChart
         return $options;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function jsonChartOptions(): array
     {
         return [
@@ -610,6 +663,9 @@ class LarapexChart
         ];
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function vueChartOptions(): array
     {
         return [
@@ -624,6 +680,9 @@ class LarapexChart
         ];
     }
 
+    /**
+     * @param string $encoded
+     */
     private function decode($encoded): mixed
     {
         return json_decode($encoded);
@@ -645,6 +704,9 @@ class LarapexChart
     |--------------------------------------------------------------------------
     */
 
+    /**
+     * @return array{height: int, width: string, type: string, options: array<string, mixed>, series: mixed}
+     */
     public function toVue() :array
     {
         $options = $this->apexOptions($this->vueChartOptions());
