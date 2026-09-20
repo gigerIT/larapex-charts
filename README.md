@@ -27,7 +27,7 @@ projects that want the same simple chart-building API.
 
 Maintained improvements include:
 
-- Laravel 13 compatibility, alongside the currently supported Laravel versions.
+- Laravel 12 and 13 compatibility.
 - Composer metadata updates so the package can be installed as
   `gigerit/larapex-charts` from Packagist.
 - CI coverage for PHPUnit, PHPStan static analysis, and a Laravel/PHP
@@ -38,6 +38,11 @@ Maintained improvements include:
   predictable package archives.
 - Ongoing maintenance, fixes, and optimizations while keeping the package
   compatible with existing usage.
+
+## Requirements
+
+PHP 8.3 or later and Laravel 12 or 13 are required. Laravel 11 is no longer
+supported; upgrade your application before installing this version.
 
 ## Drop-in replacement
 

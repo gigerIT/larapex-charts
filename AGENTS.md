@@ -146,7 +146,7 @@ testing both command fallback and publish behavior.
 - CI runs Rector and Pint before PHPStan and PHPUnit, commits formatting and
   refactoring fixes from the workflow when needed, then runs a single Ubuntu
   coverage job with PCOV and the PHPUnit matrix on Ubuntu and Windows for PHP
-  8.3, 8.4, 8.5; Laravel 11, 12, 13; and `prefer-lowest` plus `prefer-stable`.
+  8.3, 8.4, 8.5; Laravel 12, 13; and `prefer-lowest` plus `prefer-stable`.
 - No end-to-end/browser suite is configured.
 
 ## Security & Compliance
@@ -170,7 +170,7 @@ testing both command fallback and publish behavior.
 - Keep repo clean: no temporary files, dead code, dead files, or needless dirs.
 - Do not run destructive git commands unless explicitly requested.
 - Keep changes compatible with Composer constraints: PHP `^8.3`,
-  `illuminate/support` `^11.0|^12.0|^13.0`, Testbench `^9.0|^10.0|^11.1`,
+  `illuminate/support` `^12.0|^13.0`, Testbench `^10.0|^11.1`,
   PHPUnit `^11.5.50|^12.5.8|^13.0.3`, PHPStan `^2.1`.
 - Chart API or output-builder changes need tests for affected Blade, JSON, and
   Vue surfaces.
