@@ -70,6 +70,10 @@ Install the maintained fork with Composer:
 composer require gigerit/larapex-charts
 ```
 
+The `make:chart` command is registered automatically; no command publishing is
+needed. The obsolete `larapex-charts-commands` publish tag has been removed.
+Use `larapex-charts-stubs` to publish customizable chart templates.
+
 ## Usage
 
 ### Basic example

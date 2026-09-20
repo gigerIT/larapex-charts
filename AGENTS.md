@@ -118,7 +118,7 @@ flowchart TD
 ```
 
 `LarapexChartsServiceProvider` binds `larapex-chart`, merges config, loads views
-from `stubs/resources/views`, publishes config/assets/views/stubs/commands, and
+from `stubs/resources/views`, publishes config/assets/views/stubs, and
 registers `make:chart`.
 
 `LarapexChart` owns shared chart state, factory methods, and output builders.
@@ -191,7 +191,7 @@ testing both command fallback and publish behavior.
 - Laravel Boost can discover
   `resources/boost/skills/larapex-charts-development/SKILL.md` in consuming apps
   that install this package and `laravel/boost`.
-- Consumers can publish config, views, local ApexCharts asset, commands, and
+- Consumers can publish config, views, local ApexCharts asset, and
   stubs through service-provider publish tags.
 - Config controls default font family, font color, and palette.
 - `make:chart` supports `--vue` and `--json`; custom app stubs from
@@ -212,3 +212,10 @@ testing both command fallback and publish behavior.
 - `src/LarapexChart.php` fluent chart API and output builders.
 - `src/LarapexChartsServiceProvider.php` bindings, publish tags, and views.
 - `src/Console/ChartMakeCommand.php` generated chart behavior.
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.

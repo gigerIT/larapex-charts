@@ -45,10 +45,6 @@ class LarapexChartsServiceProvider extends ServiceProvider
         ], 'larapex-charts-config');
 
         $this->publishes([
-            $this->packageBasePath('stubs/Console/Commands') => app_path('Console/Commands'),
-        ], 'larapex-charts-commands');
-
-        $this->publishes([
             $this->packageBasePath('stubs/stubs') => base_path('stubs'),
         ], 'larapex-charts-stubs');
 
