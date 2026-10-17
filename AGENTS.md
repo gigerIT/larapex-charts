@@ -118,7 +118,7 @@ flowchart TD
 ```
 
 `LarapexChartsServiceProvider` binds `larapex-chart`, merges config, loads views
-from `stubs/resources/views`, publishes config/assets/views/stubs/commands, and
+from `stubs/resources/views`, publishes config/assets/views/stubs, and
 registers `make:chart`.
 
 `LarapexChart` owns shared chart state, factory methods, and output builders.
@@ -146,7 +146,7 @@ testing both command fallback and publish behavior.
 - CI runs Rector and Pint before PHPStan and PHPUnit, commits formatting and
   refactoring fixes from the workflow when needed, then runs a single Ubuntu
   coverage job with PCOV and the PHPUnit matrix on Ubuntu and Windows for PHP
-  8.3, 8.4, 8.5; Laravel 11, 12, 13; and `prefer-lowest` plus `prefer-stable`.
+  8.3, 8.4, 8.5; Laravel 12, 13; and `prefer-lowest` plus `prefer-stable`.
 - No end-to-end/browser suite is configured.
 
 ## Security & Compliance
@@ -170,7 +170,7 @@ testing both command fallback and publish behavior.
 - Keep repo clean: no temporary files, dead code, dead files, or needless dirs.
 - Do not run destructive git commands unless explicitly requested.
 - Keep changes compatible with Composer constraints: PHP `^8.3`,
-  `illuminate/support` `^11.0|^12.0|^13.0`, Testbench `^9.0|^10.0|^11.1`,
+  `illuminate/support` `^12.0|^13.0`, Testbench `^10.0|^11.1`,
   PHPUnit `^11.5.50|^12.5.8|^13.0.3`, PHPStan `^2.1`.
 - Chart API or output-builder changes need tests for affected Blade, JSON, and
   Vue surfaces.
@@ -191,7 +191,7 @@ testing both command fallback and publish behavior.
 - Laravel Boost can discover
   `resources/boost/skills/larapex-charts-development/SKILL.md` in consuming apps
   that install this package and `laravel/boost`.
-- Consumers can publish config, views, local ApexCharts asset, commands, and
+- Consumers can publish config, views, local ApexCharts asset, and
   stubs through service-provider publish tags.
 - Config controls default font family, font color, and palette.
 - `make:chart` supports `--vue` and `--json`; custom app stubs from
@@ -212,3 +212,10 @@ testing both command fallback and publish behavior.
 - `src/LarapexChart.php` fluent chart API and output builders.
 - `src/LarapexChartsServiceProvider.php` bindings, publish tags, and views.
 - `src/Console/ChartMakeCommand.php` generated chart behavior.
+
+## Maintaining this file
+
+Keep this file for knowledge useful to almost every future agent session in this project.
+Do not repeat what the codebase already shows; point to the authoritative file or command instead.
+Prefer rewriting or pruning existing entries over appending new ones.
+When updating this file, preserve this bar for all agents and keep entries concise.

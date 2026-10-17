@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace ArielMejiaDev\LarapexCharts\Tests\Unit;
 
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use ArielMejiaDev\LarapexCharts\LarapexChartsServiceProvider;
 use ArielMejiaDev\LarapexCharts\Tests\TestCase;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
@@ -13,6 +14,32 @@ use PHPUnit\Framework\Attributes\Test;
 
 final class ChartsTest extends TestCase
 {
+    #[Test]
+    public function it_publishes_every_registered_package_resource(): void
+    {
+        $this->assertSame(0, Artisan::call('vendor:publish', [
+            '--provider' => LarapexChartsServiceProvider::class,
+            '--force' => true,
+        ]));
+        $this->assertStringNotContainsString('does not exist', Artisan::output());
+
+        $paths = LarapexChartsServiceProvider::pathsToPublish(LarapexChartsServiceProvider::class);
+        $this->assertNotEmpty($paths);
+
+        foreach ($paths as $source => $destination) {
+            $this->assertTrue(File::exists($source), 'Missing publish source: '.$source);
+            $this->assertTrue(File::exists($destination), 'Missing published resource: '.$destination);
+
+            if (File::isDirectory($source)) {
+                foreach (File::allFiles($source) as $file) {
+                    $this->assertFileEquals($file->getPathname(), $destination.'/'.$file->getRelativePathname());
+                }
+            } else {
+                $this->assertFileEquals($source, $destination);
+            }
+        }
+    }
+
     #[Test]
     public function it_tests_larapex_charts_install_add_chart_stubs(): void
     {
