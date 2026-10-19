@@ -1,5 +1,13 @@
 # Changelog
 
+## [10.1.1](https://github.com/gigerIT/larapex-charts/compare/v10.1.0...v10.1.1) (2026-10-17)
+
+
+### Bug Fixes
+
+* remove obsolete command publish registration ([12c167a](https://github.com/gigerIT/larapex-charts/commit/12c167ad1ad2d5423d68ea8db38d5992801c2c29))
+* remove obsolete command publish registration ([56eebf9](https://github.com/gigerIT/larapex-charts/commit/56eebf9ba9c39626966f2efe5b0b469ed8340123))
+
 ## [10.1.0](https://github.com/gigerIT/larapex-charts/compare/v10.0.0...v10.1.0) (2026-05-12)
 
 
