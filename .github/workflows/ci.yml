@@ -2,6 +2,8 @@ name: ci
 
 on:
   push:
+    branches: [master]
+  pull_request:
   workflow_dispatch:
 
 permissions:
@@ -16,13 +18,9 @@ jobs:
     name: Pint
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    permissions:
-      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-        with:
-          ref: ${{ github.ref_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -32,19 +30,12 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Run Rector and Pint
+      - name: Check Rector and Pint without changing source
         run: |
-          composer run refactor
-          composer run lint
-
-      - name: Commit linted code
-        if: github.ref_type == 'branch'
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: "style: lint"
-          branch: ${{ github.ref_name }}
+          vendor/bin/rector process --dry-run
+          composer run lint:test
 
   phpstan:
     name: PHPStan
@@ -54,8 +45,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-        with:
-          ref: ${{ github.ref_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -68,7 +57,7 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction
+        run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Execute PHPStan
         run: composer run test:types
@@ -79,6 +68,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       fail-fast: false
+      max-parallel: 2
       matrix:
         os: [ubuntu-latest, windows-latest]
         php: [8.5, 8.4, 8.3]
@@ -95,8 +85,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-        with:
-          ref: ${{ github.ref_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -129,8 +117,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-        with:
-          ref: ${{ github.ref_name }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -145,7 +131,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction
+        run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Execute tests with coverage
         run: vendor/bin/phpunit --coverage-text --colors=never
@@ -155,7 +141,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: [test, coverage]
-    if: github.ref_name == github.event.repository.default_branch
+    if: github.event_name == 'push' && github.ref_name == github.event.repository.default_branch
     permissions:
       contents: write
       issues: write

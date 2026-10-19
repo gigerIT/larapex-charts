@@ -143,10 +143,12 @@ testing both command fallback and publish behavior.
   the ApexCharts CDN URL.
 - `phpunit.xml.dist` randomizes order and fails on warnings, risky tests, and
   empty suites.
-- CI runs Rector and Pint before PHPStan and PHPUnit, commits formatting and
-  refactoring fixes from the workflow when needed, then runs a single Ubuntu
-  coverage job with PCOV and the PHPUnit matrix on Ubuntu and Windows for PHP
+- CI checks Rector and Pint without changing source before PHPStan and PHPUnit,
+  then runs an Ubuntu coverage job with PCOV and the PHPUnit matrix on Ubuntu
+  and Windows for PHP
   8.3, 8.4, 8.5; Laravel 12, 13; and `prefer-lowest` plus `prefer-stable`.
+  Pull requests and pushes to `master` run CI; release automation runs only on
+  default-branch pushes. Matrix execution is limited to two parallel jobs.
 - No end-to-end/browser suite is configured.
 
 ## Security & Compliance
