@@ -150,6 +150,7 @@ jobs:
       - name: Create release pull request or GitHub release
         uses: googleapis/release-please-action@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          # A PAT lets release PR checks start without manual approval.
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
