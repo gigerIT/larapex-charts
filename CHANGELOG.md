@@ -1,5 +1,29 @@
 # Changelog
 
+## [10.2.0](https://github.com/gigerIT/larapex-charts/compare/v10.1.1...v10.2.0) (2026-11-06)
+
+
+### Features
+
+* allow leaving chart.foreColor and theme.mode unset ([c0540a3](https://github.com/gigerIT/larapex-charts/commit/c0540a3aa8b7f7a89dd88b539fbb3aaa7cefa765)), closes [#9](https://github.com/gigerIT/larapex-charts/issues/9)
+* update bundled ApexCharts asset to 8.7.0 ([b2e89ae](https://github.com/gigerIT/larapex-charts/commit/b2e89ae4f009cac4a07c0fb79377fefb5612e400))
+
+
+### Bug Fixes
+
+* apply setOptions() overrides to every chart output ([e83a32e](https://github.com/gigerIT/larapex-charts/commit/e83a32e7d6766a933bee60f4a6ad372820ac6347)), closes [#7](https://github.com/gigerIT/larapex-charts/issues/7) [#8](https://github.com/gigerIT/larapex-charts/issues/8)
+* carry setOptions() overrides into toVue() component props ([ad00c49](https://github.com/gigerIT/larapex-charts/commit/ad00c490c88f60882caf057c229b28946f0920aa))
+* correct sample content in make:chart stubs ([31b7211](https://github.com/gigerIT/larapex-charts/commit/31b7211b698a7fac1532ede1d2573a082984df12))
+* emit working legend, sparkline, and font options in JSON and Vue ([4d4cc8c](https://github.com/gigerIT/larapex-charts/commit/4d4cc8c187ef026107aa4b0db381c95c02abd323))
+* make generated chart classes runnable from every stub ([c39df16](https://github.com/gigerIT/larapex-charts/commit/c39df1682465bbcde6190bcb90b46fb1eaff1235))
+* pin cdn() to ApexCharts 8 ([eec86f4](https://github.com/gigerIT/larapex-charts/commit/eec86f450c0b2929ae79708ab4342416eb3a069e)), closes [#10](https://github.com/gigerIT/larapex-charts/issues/10)
+
+
+### Miscellaneous Chores
+
+* enable agent project guidance ([ca069bc](https://github.com/gigerIT/larapex-charts/commit/ca069bca633551e0137ea5d0d9728527fd7cfe01))
+* exclude dev tooling config from package archives ([71f37bb](https://github.com/gigerIT/larapex-charts/commit/71f37bb33e735e8500fde0d33744dc570f6e662c))
+
 ## [10.1.1](https://github.com/gigerIT/larapex-charts/compare/v10.1.0...v10.1.1) (2026-10-17)
 
 
