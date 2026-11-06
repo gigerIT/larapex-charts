@@ -71,6 +71,7 @@ final class ChartsTest extends TestCase
     #[Test]
     public function it_tests_larapex_charts_install_add_chart_stubs(): void
     {
+        File::deleteDirectory(base_path('stubs/charts'));
         Artisan::call('vendor:publish', ['--all' => true, '--force' => true]);
 
         $chartTypes = collect([
@@ -171,10 +172,11 @@ final class ChartsTest extends TestCase
     #[DataProvider('generatedChartStubs')]
     public function it_tests_make_chart_generates_runnable_chart_classes(string $source, string $output, string $choice, string $chartClass): void
     {
+        File::deleteDirectory(base_path('stubs/charts'));
+
         if ($source === 'published') {
             Artisan::call('vendor:publish', ['--tag' => 'larapex-charts-stubs', '--force' => true]);
-        } else {
-            File::deleteDirectory(base_path('stubs/charts'));
+            $this->assertDirectoryExists(base_path('stubs/charts/'.$output));
         }
 
         $className = Str::studly(sprintf('generated %s %s %s', $source, $output, $choice));

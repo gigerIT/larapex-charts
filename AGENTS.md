@@ -13,8 +13,8 @@ and `make:chart` stubs for Blade, JSON, and Vue output.
 - `resources/boost/` Laravel Boost resources, including the distributed
   consumer skill.
 - `src/` package source, chart classes, facade, contracts, traits, command, and
-  command fallback stubs.
-- `stubs/` publishable public asset, Blade views, command stubs, and app stubs.
+  `make:chart` stubs.
+- `stubs/` publishable ApexCharts asset and Blade views.
 - `tests/` PHPUnit/Testbench feature and unit tests.
 
 ## Build & Development Commands
@@ -93,9 +93,9 @@ JSON, and Vue output come from the same chart state through builders that
 diverge per surface. Before changing a setter, output builder, chart type, or
 stub, read `.agents/skills/larapex-chart-api/SKILL.md`.
 
-Two stub trees are separate. `src/stubs/charts` is command fallback for
-`WithModelStub`. `stubs/stubs/charts` is published into consuming apps. Keep
-their contents identical.
+`src/stubs/charts` is the single source of `make:chart` stubs: `WithModelStub`
+falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
+`stubs/charts`, whose copies take precedence.
 
 ## Testing Strategy
 
@@ -106,8 +106,9 @@ their contents identical.
   SQLite.
 - Feature tests cover chart construction, view rendering, facade behavior,
   independent chart instances, and Vue output.
-- Unit tests cover publishing, running every `make:chart` stub from both stub
-  trees, script loading, config color overrides, and the ApexCharts CDN URL.
+- Unit tests cover publishing, running every `make:chart` stub both as
+  published and as package fallback, script loading, config color overrides,
+  and the ApexCharts CDN URL.
 - `phpunit.xml.dist` randomizes order and fails on warnings, risky tests, and
   empty suites.
 - CI checks Rector and Pint without changing source before PHPStan and PHPUnit,

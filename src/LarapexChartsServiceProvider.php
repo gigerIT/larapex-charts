@@ -45,7 +45,7 @@ class LarapexChartsServiceProvider extends ServiceProvider
         ], 'larapex-charts-config');
 
         $this->publishes([
-            $this->packageBasePath('stubs/stubs') => base_path('stubs'),
+            $this->packageBasePath('src/stubs/charts') => base_path('stubs/charts'),
         ], 'larapex-charts-stubs');
 
     }
