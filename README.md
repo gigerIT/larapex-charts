@@ -77,7 +77,11 @@ composer require gigerit/larapex-charts
 
 The `make:chart` command is registered automatically; no command publishing is
 needed. The obsolete `larapex-charts-commands` publish tag has been removed.
-Use `larapex-charts-stubs` to publish customizable chart templates.
+Use `larapex-charts-stubs` to publish customizable chart templates. Published
+stubs are copies that Composer updates do not touch; to pick up stub fixes after
+upgrading, republish them with
+`php artisan vendor:publish --tag=larapex-charts-stubs --force`, which
+overwrites your customizations.
 
 ## Usage
 
@@ -86,23 +90,16 @@ Use `larapex-charts-stubs` to publish customizable chart templates.
 In your controller add:
 
 ```php
-$chart = (new LarapexChart)->setTitle('Posts')
-                   ->setDataset([150, 120])
-                   ->setLabels(['Published', 'No Published']);
-
-```
-
-Remember to import the Facade to your controller with:
-
-```php
 use ArielMejiaDev\LarapexCharts\Facades\LarapexChart;
+
+$chart = LarapexChart::donutChart()
+    ->setTitle('Posts')
+    ->addData([150, 120])
+    ->setLabels(['Published', 'No Published']);
 ```
 
-Or importing the LarapexChart class:
-
-```php
-use ArielMejiaDev\LarapexCharts\LarapexChart;
-```
+Without the facade, import `ArielMejiaDev\LarapexCharts\LarapexChart` and start
+with `(new LarapexChart)->donutChart()`.
 
 Then in your view (Blade file) add:
 
@@ -130,21 +127,20 @@ Then in your view (Blade file) add:
 ### More complex example
 
 ```php
-$chart = (new LarapexChart)->setType('area')
-        ->setTitle('Total Users Monthly')
-        ->setSubtitle('From January to March')
-        ->setXAxis([
-            'Jan', 'Feb', 'Mar'
-        ])
-        ->setDataset([
-            [
-                'name'  =>  'Active Users',
-                'data'  =>  [250, 700, 1200]
-            ]
-        ]);
+$chart = LarapexChart::areaChart()
+    ->setTitle('Total Users Monthly')
+    ->setSubtitle('From January to March')
+    ->setXAxis(['Jan', 'Feb', 'Mar'])
+    ->addData([250, 700, 1200], 'Active Users')
+    ->addData([100, 300, 650], 'New Users');
 ```
 
-You can create a variety of charts including: Line, Area, Bar, Horizontal Bar, Heatmap, pie, donut and Radialbar.
+Each chart type has a factory: `pieChart()`, `donutChart()`, `radialChart()`,
+`polarAreaChart()`, `lineChart()`, `areaChart()`, `barChart()`,
+`horizontalBarChart()`, `heatMapChart()`, and `radarChart()`. Pie, donut,
+radial, and polar area charts take one `addData([...])` call plus
+`setLabels([...])`; the others take one `addData([...], 'Series name')` call per
+series.
 
 ## More examples
 
