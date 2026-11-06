@@ -4,16 +4,44 @@ declare(strict_types=1);
 
 namespace ArielMejiaDev\LarapexCharts\Tests\Unit;
 
+use ArielMejiaDev\LarapexCharts\AreaChart;
+use ArielMejiaDev\LarapexCharts\BarChart;
+use ArielMejiaDev\LarapexCharts\Contracts\MustAddComplexData;
+use ArielMejiaDev\LarapexCharts\DonutChart;
+use ArielMejiaDev\LarapexCharts\HeatMapChart;
+use ArielMejiaDev\LarapexCharts\HorizontalBar;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
 use ArielMejiaDev\LarapexCharts\LarapexChartsServiceProvider;
+use ArielMejiaDev\LarapexCharts\LineChart;
+use ArielMejiaDev\LarapexCharts\PieChart;
+use ArielMejiaDev\LarapexCharts\PolarAreaChart;
+use ArielMejiaDev\LarapexCharts\RadarChart;
+use ArielMejiaDev\LarapexCharts\RadialChart;
 use ArielMejiaDev\LarapexCharts\Tests\TestCase;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Illuminate\Testing\PendingCommand;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
 final class ChartsTest extends TestCase
 {
+    /** make:chart choices, in prompt order, mapped to the chart class each one builds. */
+    private const array MAKE_CHART_CHOICES = [
+        'Pie Chart' => PieChart::class,
+        'Donut Chart' => DonutChart::class,
+        'Radial Bar Chart' => RadialChart::class,
+        'Polar Area Chart' => PolarAreaChart::class,
+        'Line Chart' => LineChart::class,
+        'Area Chart' => AreaChart::class,
+        'Bar Chart' => BarChart::class,
+        'Horizontal Bar Chart' => HorizontalBar::class,
+        'Heatmap Chart' => HeatMapChart::class,
+        'Radar Chart' => RadarChart::class,
+    ];
+
     #[Test]
     public function it_publishes_every_registered_package_resource(): void
     {
@@ -111,18 +139,7 @@ final class ChartsTest extends TestCase
         $this->assertInstanceOf(PendingCommand::class, $command);
 
         $command
-            ->expectsChoice('Select a chart type', 'Line Chart', [
-                'Pie Chart',
-                'Donut Chart',
-                'Radial Bar Chart',
-                'Polar Area Chart',
-                'Line Chart',
-                'Area Chart',
-                'Bar Chart',
-                'Horizontal Bar Chart',
-                'Heatmap Chart',
-                'Radar Chart',
-            ])
+            ->expectsChoice('Select a chart type', 'Line Chart', array_keys(self::MAKE_CHART_CHOICES))
             ->assertExitCode(0);
         $command->run();
 
@@ -131,6 +148,90 @@ final class ChartsTest extends TestCase
         $this->assertStringContainsString('->lineChart()', File::get($path));
         $this->assertStringContainsString("->addData([40, 93, 35, 42, 18, 82], 'Physical sales')", File::get($path));
         $this->assertStringContainsString('->toJson()', File::get($path));
+    }
+
+    /**
+     * @return iterable<string, array{string, string, string, class-string<LarapexChart>}>
+     */
+    public static function generatedChartStubs(): iterable
+    {
+        foreach (['published', 'fallback'] as $source) {
+            foreach (['Default', 'Json', 'Vue'] as $output) {
+                foreach (self::MAKE_CHART_CHOICES as $choice => $chartClass) {
+                    yield sprintf('%s %s %s', $source, $output, $choice) => [$source, $output, $choice, $chartClass];
+                }
+            }
+        }
+    }
+
+    /**
+     * @param  class-string<LarapexChart>  $chartClass
+     */
+    #[Test]
+    #[DataProvider('generatedChartStubs')]
+    public function it_tests_make_chart_generates_runnable_chart_classes(string $source, string $output, string $choice, string $chartClass): void
+    {
+        if ($source === 'published') {
+            Artisan::call('vendor:publish', ['--tag' => 'larapex-charts-stubs', '--force' => true]);
+        } else {
+            File::deleteDirectory(base_path('stubs/charts'));
+        }
+
+        $className = Str::studly(sprintf('generated %s %s %s', $source, $output, $choice));
+        $path = app_path(sprintf('Charts/%s.php', $className));
+        File::delete($path);
+
+        $command = $this->artisan('make:chart', [
+            'name' => $className,
+            '--json' => $output === 'Json',
+            '--vue' => $output === 'Vue',
+        ]);
+        $this->assertInstanceOf(PendingCommand::class, $command);
+        $command
+            ->expectsChoice('Select a chart type', $choice, array_keys(self::MAKE_CHART_CHOICES))
+            ->assertExitCode(0);
+        $command->run();
+
+        require_once $path;
+        File::delete($path);
+        $result = resolve('App\\Charts\\'.$className)->build();
+
+        if ($output === 'Default') {
+            $this->assertInstanceOf($chartClass, $result);
+            $this->assertStringContainsString($result->id(), $result->script()->render());
+            $type = $result->type();
+            $series = $result->toScriptOptions()['series'];
+        } elseif ($output === 'Json') {
+            $this->assertInstanceOf(JsonResponse::class, $result);
+            $payload = $result->getData(true);
+            $type = $payload['options']['chart']['type'];
+            $series = $payload['options']['series'];
+        } else {
+            $this->assertIsArray($result);
+            $type = $result['type'];
+            $series = $result['series'];
+        }
+
+        $this->assertSame(resolve($chartClass)->type(), $type);
+
+        $series = json_decode(json_encode($series, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
+        $this->assertIsArray($series);
+        $this->assertNotEmpty($series);
+
+        if (! is_subclass_of($chartClass, MustAddComplexData::class)) {
+            $this->assertContainsOnlyNumeric($series);
+
+            return;
+        }
+
+        foreach ($series as $entry) {
+            $this->assertIsArray($entry);
+            $this->assertIsString($entry['name']);
+            $this->assertNotSame('', $entry['name']);
+            $this->assertIsArray($entry['data']);
+            $this->assertNotEmpty($entry['data']);
+            $this->assertContainsOnlyNumeric($entry['data']);
+        }
     }
 
     #[Test]

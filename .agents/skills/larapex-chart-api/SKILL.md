@@ -40,11 +40,11 @@ Done means every step below is satisfied:
 1. Thin subclass in `src/` (type set in the constructor), implementing `MustAddSimpleData` with `SimpleChartDataAggregator` or `MustAddComplexData` with `ComplexChartDataAggregator`.
 2. Factory method on `LarapexChart` and a matching `@method static` line on `src/Facades/LarapexChart.php`.
 3. Entry in `ChartMakeCommand::$chartTypes`, then `Default`, `Json`, and `Vue` stubs in **both** stub trees.
-4. Tests: a render test in `tests/Feature/ChartsTest.php`; extend the stub list in `it_tests_larapex_charts_install_add_chart_stubs` and the choice list in `it_tests_make_chart_generates_json_chart_from_package_fallback_stub`.
+4. Tests: a render test in `tests/Feature/ChartsTest.php`. In `tests/Unit/ChartsTest.php`, add the choice to `MAKE_CHART_CHOICES`, which generates and runs the new stubs, and the stub name to `it_tests_larapex_charts_install_add_chart_stubs`.
 5. Add the factory to the README and to the Boost skill's factory list.
 
 ## Stub trees
 
 - `src/stubs/charts/` is the `make:chart` fallback, resolved by `WithModelStub::resolveStubPath()` when the app has no custom stub.
-- `stubs/stubs/charts/` is what `vendor:publish --tag=larapex-charts-stubs` copies into apps. Tests only check that it exists and copies byte-for-byte, so its PHP is never executed.
-- The trees have drifted. Take current API usage from `src/stubs/charts/`, and run `diff -r src/stubs/charts stubs/stubs/charts` before editing either.
+- `stubs/stubs/charts/` is what `vendor:publish --tag=larapex-charts-stubs` copies into apps, where it takes precedence over the fallback.
+- Keep the trees identical: edit one, copy it over the other, and confirm `diff -r src/stubs/charts stubs/stubs/charts` prints nothing. `it_tests_make_chart_generates_runnable_chart_classes` generates every stub from both trees through `make:chart` and runs its `build()`.

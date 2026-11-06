@@ -94,9 +94,8 @@ diverge per surface. Before changing a setter, output builder, chart type, or
 stub, read `.agents/skills/larapex-chart-api/SKILL.md`.
 
 Two stub trees are separate. `src/stubs/charts` is command fallback for
-`WithModelStub`. `stubs/stubs/charts` is published into consuming apps. They
-have drifted; change either only with tests for both command fallback and
-publish behavior.
+`WithModelStub`. `stubs/stubs/charts` is published into consuming apps. Keep
+their contents identical.
 
 ## Testing Strategy
 
@@ -107,8 +106,8 @@ publish behavior.
   SQLite.
 - Feature tests cover chart construction, view rendering, facade behavior,
   independent chart instances, and Vue output.
-- Unit tests cover publishing stubs, script loading, config color overrides, and
-  the ApexCharts CDN URL.
+- Unit tests cover publishing, running every `make:chart` stub from both stub
+  trees, script loading, config color overrides, and the ApexCharts CDN URL.
 - `phpunit.xml.dist` randomizes order and fails on warnings, risky tests, and
   empty suites.
 - CI checks Rector and Pint without changing source before PHPStan and PHPUnit,
