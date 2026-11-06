@@ -124,8 +124,8 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 - MIT license; see `LICENSE.md`. The bundled `stubs/public/apexcharts.js` is
   npm `apexcharts` `dist/apexcharts.min.js` (version in its header) under the
   non-MIT ApexCharts License. When updating it, verify the tarball against the
-  registry integrity hash and update the version in `README.md` and the Boost
-  skill.
+  registry integrity hash, keep the `cdn()` major pin in step, and update the
+  version in `README.md` and the Boost skill.
 - No secrets or `.env` files are required for normal package work.
 - Do not commit credentials, tokens, private registry auth, or local `.env`.
 - `composer.lock` is ignored; CI resolves dependencies for the selected matrix.
@@ -171,7 +171,8 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 - Config controls default font family, font color, and palette.
 - `make:chart` supports `--vue` and `--json`; custom app stubs from
   `base_path("stubs/charts/...")` win before package fallback stubs.
-- Default CDN helper returns `https://cdn.jsdelivr.net/npm/apexcharts`.
+- Default CDN helper returns `https://cdn.jsdelivr.net/npm/apexcharts@8`,
+  pinned to the bundled asset's ApexCharts major.
 
 > TODO: No feature flags or package-specific environment variables were found.
 

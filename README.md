@@ -85,10 +85,10 @@ overwrites your customizations.
 
 ## ApexCharts version and license
 
-`$chart->cdn()` returns `https://cdn.jsdelivr.net/npm/apexcharts`, which always
-serves the latest ApexCharts release. The local copy published with the
+`$chart->cdn()` returns `https://cdn.jsdelivr.net/npm/apexcharts@8`, which
+serves the latest ApexCharts 8.x release. The local copy published with the
 `larapex-charts-apexcharts-script` tag is ApexCharts 8.7.0; the version is in
-the file header.
+the file header. Moving to a new ApexCharts major is a package change.
 
 ApexCharts 5.2 and later are not MIT licensed. They are distributed under the
 [ApexCharts License](https://apexcharts.com/license), which is free for

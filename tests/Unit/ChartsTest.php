@@ -126,7 +126,7 @@ final class ChartsTest extends TestCase
     #[Test]
     public function it_tests_larapex_chart_cdn_returns_a_correct_url(): void
     {
-        $this->assertSame('https://cdn.jsdelivr.net/npm/apexcharts', (new LarapexChart)->cdn());
+        $this->assertSame('https://cdn.jsdelivr.net/npm/apexcharts@8', (new LarapexChart)->cdn());
     }
 
     #[Test]

@@ -488,9 +488,13 @@ class LarapexChart
         return View::make('larapex-charts::chart.script', ['chart' => $this]);
     }
 
+    /**
+     * Pinned to the ApexCharts major of the bundled stubs/public/apexcharts.js;
+     * upgrade both together.
+     */
     public static function cdn(): string
     {
-        return 'https://cdn.jsdelivr.net/npm/apexcharts';
+        return 'https://cdn.jsdelivr.net/npm/apexcharts@8';
     }
 
     public function id(): string
