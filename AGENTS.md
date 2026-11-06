@@ -125,7 +125,11 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
   npm `apexcharts` `dist/apexcharts.min.js` (version in its header) under the
   non-MIT ApexCharts License. When updating it, verify the tarball against the
   registry integrity hash, keep the `cdn()` major pin in step, and update the
-  version in `README.md` and the Boost skill.
+  version in `README.md` and the Boost skill. PHPUnit never runs ApexCharts, so
+  for a new major render every chart type's `script()` output on the old and
+  new asset in headless Chromium (`--headless=new --dump-dom
+  --virtual-time-budget=15000 --allow-file-access-from-files`) and compare JS
+  errors and drawn SVG.
 - No secrets or `.env` files are required for normal package work.
 - Do not commit credentials, tokens, private registry auth, or local `.env`.
 - `composer.lock` is ignored; CI resolves dependencies for the selected matrix.
