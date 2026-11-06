@@ -822,18 +822,22 @@ class LarapexChart
     */
 
     /**
-     * @return array{height: int, width: string, type: string, options: array<string, mixed>, series: mixed}
+     * The Vue component's height, width, type, and series props take precedence
+     * over the same keys in options, so they carry any setOptions() overrides.
+     *
+     * @return array{height: int|string, width: int|string, type: string, options: array<string, mixed>, series: mixed}
      */
     public function toVue(): array
     {
         $options = $this->apexOptions($this->vueChartOptions());
+        $chart = is_array($options['chart'] ?? null) ? $options['chart'] : [];
 
         return [
-            'height' => $this->height(),
-            'width' => $this->width(),
-            'type' => $this->type(),
+            'height' => $chart['height'] ?? $this->height(),
+            'width' => $chart['width'] ?? $this->width(),
+            'type' => $chart['type'] ?? $this->type(),
             'options' => $options,
-            'series' => $this->decode($this->dataset()),
+            'series' => $options['series'] ?? $this->decode($this->dataset()),
         ];
     }
 }

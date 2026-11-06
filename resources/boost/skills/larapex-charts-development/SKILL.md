@@ -76,7 +76,7 @@ Use `toVue()` when passing chart props to a Vue/ApexCharts component:
 $usersChart = $chart->toVue();
 ```
 
-`toVue()` returns `height`, `width`, `type`, `options`, and `series`. A Vue component should pass those values to `vue3-apexcharts`/`apexchart` as props, for example `:type="chart.type"`, `:options="chart.options"`, and `:series="chart.series"`.
+`toVue()` returns `height`, `width`, `type`, `options`, and `series`. A Vue component should pass all five to `vue3-apexcharts`/`apexchart` as props: `:height="chart.height"`, `:width="chart.width"`, `:type="chart.type"`, `:options="chart.options"`, and `:series="chart.series"`. The component's own `height` and `width` props take precedence over `options`, so leaving them unbound ignores `setHeight()`, `setWidth()`, and matching `setOptions()` overrides.
 
 `toJson()` returns an `Illuminate\Http\JsonResponse` with `id` and `options`; `options` includes ApexCharts options and `series`, so it is the right output for Inertia-adjacent endpoints, React, Angular, or plain JavaScript consumers.
 

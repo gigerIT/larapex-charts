@@ -510,6 +510,30 @@ final class ChartsTest extends TestCase
     }
 
     #[Test]
+    public function it_tests_set_options_overrides_reach_vue_component_props(): void
+    {
+        $series = [
+            ['name' => 'Revenue', 'type' => 'column', 'data' => [10, 20]],
+            ['name' => 'Trend', 'type' => 'line', 'data' => [12, 18]],
+        ];
+
+        $vue = (new LarapexChart)->lineChart()
+            ->addData([1, 2], 'Series')
+            ->setXAxis(['a', 'b'])
+            ->setOptions([
+                'chart' => ['height' => 240, 'width' => '50%', 'type' => 'area'],
+                'series' => $series,
+            ])
+            ->toVue();
+
+        $this->assertSame(240, $vue['height']);
+        $this->assertSame('50%', $vue['width']);
+        $this->assertSame('area', $vue['type']);
+        $this->assertSame($series, $vue['series']);
+        $this->assertSame(240, $vue['options']['chart']['height']);
+    }
+
+    #[Test]
     public function it_tests_null_font_color_and_theme_are_omitted_from_every_output(): void
     {
         $chart = (new LarapexChart)->lineChart()
