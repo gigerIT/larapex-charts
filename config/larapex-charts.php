@@ -11,7 +11,8 @@ return [
     | Font Options
     |--------------------------------------------------------------------------
     |
-    | Here you may specify font family and font color.
+    | Here you may specify font family and font color. Set font_color to null
+    | to let ApexCharts or your frontend theme choose the text color.
     |
     */
 

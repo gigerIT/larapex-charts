@@ -491,14 +491,9 @@ final class ChartsTest extends TestCase
                 'colors' => ['#abcdef'],
             ]);
 
-        $outputs = [
-            'blade' => $chart->toScriptOptions(),
-            'json' => $chart->toJson()->getData(true)['options'],
-            'vue' => $chart->toVue()['options'],
-        ];
+        $outputs = $this->optionsForEveryOutput($chart);
 
         foreach ($outputs as $surface => $options) {
-            $options = json_decode(json_encode($options, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
             $this->assertSame(['enabled' => false], $options['tooltip'], $surface);
             $this->assertSame('#ffffff', $options['chart']['foreColor'], $surface);
             $this->assertSame(['show' => true, 'tools' => ['download' => false]], $options['chart']['toolbar'], $surface);
@@ -511,6 +506,53 @@ final class ChartsTest extends TestCase
         $this->assertSame(
             $outputs['json'],
             json_decode(json_encode($chart->getOptions(), JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    #[Test]
+    public function it_tests_null_font_color_and_theme_are_omitted_from_every_output(): void
+    {
+        $chart = (new LarapexChart)->lineChart()
+            ->addData([1, 2], 'Series')
+            ->setXAxis(['a', 'b'])
+            ->setFontColor(null)
+            ->setTheme(null);
+
+        $this->assertNull($chart->foreColor());
+
+        foreach ($this->optionsForEveryOutput($chart) as $surface => $options) {
+            $this->assertArrayNotHasKey('foreColor', $options['chart'], $surface);
+            $this->assertArrayNotHasKey('theme', $options, $surface);
+        }
+    }
+
+    #[Test]
+    public function it_tests_null_font_color_config_omits_fore_color_from_every_output(): void
+    {
+        config(['larapex-charts.font_color' => null]);
+
+        $chart = (new LarapexChart)->lineChart()->addData([1, 2], 'Series')->setXAxis(['a', 'b']);
+
+        foreach ($this->optionsForEveryOutput($chart) as $surface => $options) {
+            $this->assertArrayNotHasKey('foreColor', $options['chart'], $surface);
+            $this->assertSame(['mode' => 'light'], $options['theme'], $surface);
+        }
+    }
+
+    /**
+     * @return array{blade: array<string, mixed>, json: array<string, mixed>, vue: array<string, mixed>}
+     */
+    private function optionsForEveryOutput(LarapexChart $chart): array
+    {
+        $outputs = [
+            'blade' => $chart->toScriptOptions(),
+            'json' => $chart->toJson()->getData(true)['options'],
+            'vue' => $chart->toVue()['options'],
+        ];
+
+        return array_map(
+            fn (array $options): array => json_decode(json_encode($options, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR),
+            $outputs,
         );
     }
 

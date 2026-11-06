@@ -72,7 +72,7 @@ class LarapexChart
 
     protected string $fontFamily;
 
-    protected string $foreColor;
+    protected ?string $foreColor;
 
     protected string $dataset = '';
 
@@ -108,7 +108,7 @@ class LarapexChart
 
     protected string $dataLabels;
 
-    protected string $theme = 'light';
+    protected ?string $theme = 'light';
 
     protected string $sparkline;
 
@@ -202,7 +202,10 @@ class LarapexChart
         return $this;
     }
 
-    public function setFontColor(string $fontColor): LarapexChart
+    /**
+     * Pass null to leave chart.foreColor unset so ApexCharts or the frontend theme decides.
+     */
+    public function setFontColor(?string $fontColor): LarapexChart
     {
         $this->foreColor = $fontColor;
 
@@ -391,7 +394,10 @@ class LarapexChart
         return $this;
     }
 
-    public function setTheme(string $theme): LarapexChart
+    /**
+     * Pass null to leave theme.mode unset so the frontend can choose light or dark.
+     */
+    public function setTheme(?string $theme): LarapexChart
     {
         $this->theme = $theme;
 
@@ -517,7 +523,7 @@ class LarapexChart
         return $this->fontFamily;
     }
 
-    public function foreColor(): string
+    public function foreColor(): ?string
     {
         return $this->foreColor;
     }
@@ -659,6 +665,10 @@ class LarapexChart
      */
     private function apexOptions(array $chartOptions, bool $includeSeries = false): array
     {
+        if ($this->foreColor !== null) {
+            $chartOptions['foreColor'] = $this->foreColor;
+        }
+
         $options = [
             'chart' => $chartOptions,
             'plotOptions' => [
@@ -672,9 +682,12 @@ class LarapexChart
         }
 
         $options['dataLabels'] = $this->decode($this->dataLabels());
-        $options['theme'] = [
-            'mode' => $this->theme,
-        ];
+        if ($this->theme !== null) {
+            $options['theme'] = [
+                'mode' => $this->theme,
+            ];
+        }
+
         $options['title'] = [
             'text' => $this->title(),
         ];
@@ -723,7 +736,6 @@ class LarapexChart
             'toolbar' => $this->decode($this->toolbar()),
             'zoom' => $this->decode($this->zoom()),
             'fontFamily' => $this->fontFamily(),
-            'foreColor' => $this->foreColor(),
             'sparkline' => $this->decode($this->sparkline()),
             'stacked' => $this->stacked(),
         ];
@@ -740,7 +752,6 @@ class LarapexChart
             'toolbar' => $this->decode($this->toolbar()),
             'zoom' => $this->decode($this->zoom()),
             'fontFamily' => $this->fontFamily(),
-            'foreColor' => $this->foreColor(),
             'sparkline' => $this->decode($this->sparkline()),
             'stacked' => $this->stacked(),
         ];
@@ -759,7 +770,6 @@ class LarapexChart
             'toolbar' => $this->decode($this->toolbar()),
             'zoom' => $this->decode($this->zoom()),
             'fontFamily' => $this->fontFamily(),
-            'foreColor' => $this->foreColor(),
             'sparkline' => $this->decode($this->sparkline()),
         ];
 

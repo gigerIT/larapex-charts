@@ -173,6 +173,14 @@ $chart = LarapexChart::areaChart()
     ]);
 ```
 
+### Light and dark frontend themes
+
+Every chart sends `chart.foreColor` from the `font_color` config and
+`theme.mode` `light` by default. When the frontend switches between light and
+dark themes, leave them unset so ApexCharts' or your app's theme colors apply:
+set `font_color` to `null` in `config/larapex-charts.php`, or call
+`setFontColor(null)` and `setTheme(null)` on a chart.
+
 ## More examples
 
 Check the documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.app/)
