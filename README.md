@@ -83,6 +83,21 @@ upgrading, republish them with
 `php artisan vendor:publish --tag=larapex-charts-stubs --force`, which
 overwrites your customizations.
 
+## ApexCharts version and license
+
+`$chart->cdn()` returns `https://cdn.jsdelivr.net/npm/apexcharts`, which always
+serves the latest ApexCharts release. The local copy published with the
+`larapex-charts-apexcharts-script` tag is ApexCharts 8.7.0; the version is in
+the file header.
+
+ApexCharts 5.2 and later are not MIT licensed. They are distributed under the
+[ApexCharts License](https://apexcharts.com/license), which is free for
+organizations under $2M USD in annual revenue, budget, or funding; larger
+organizations need a commercial license. Check that your use complies before
+loading either file. To load a specific version instead, replace
+`$chart->cdn()` with your own script tag, such as
+`https://cdn.jsdelivr.net/npm/apexcharts@4.7.0`, the last MIT-licensed release.
+
 ## Usage
 
 ### Basic example
@@ -172,7 +187,11 @@ original package API and credits while continuing maintenance for modern Laravel
 projects.
 
 ## License
-[MIT](./LICENSE.md)
+
+Larapex Charts is [MIT](./LICENSE.md) licensed. The bundled
+`stubs/public/apexcharts.js` is ApexCharts, distributed under the
+[ApexCharts License](https://apexcharts.com/license); see
+[ApexCharts version and license](#apexcharts-version-and-license).
 
 ## Roadmap for future versions
 

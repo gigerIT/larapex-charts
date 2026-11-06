@@ -101,6 +101,8 @@ To host ApexCharts locally instead of using the CDN, publish `larapex-charts-ape
 <script src="{{ asset('vendor/larapex-charts/apexcharts.js') }}"></script>
 ```
 
+`cdn()` loads the latest ApexCharts release, and the published local asset is ApexCharts 8.7.0. ApexCharts 5.2 and later use the ApexCharts License, which is free only for organizations under $2M USD in annual revenue, budget, or funding; tell the user about it when adding ApexCharts to an app. `https://cdn.jsdelivr.net/npm/apexcharts@4.7.0` is the last MIT-licensed release.
+
 ## Customization
 
 Common chart-level setters:

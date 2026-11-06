@@ -121,7 +121,11 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 
 ## Security & Compliance
 
-- MIT license; see `LICENSE.md`.
+- MIT license; see `LICENSE.md`. The bundled `stubs/public/apexcharts.js` is
+  npm `apexcharts` `dist/apexcharts.min.js` (version in its header) under the
+  non-MIT ApexCharts License. When updating it, verify the tarball against the
+  registry integrity hash and update the version in `README.md` and the Boost
+  skill.
 - No secrets or `.env` files are required for normal package work.
 - Do not commit credentials, tokens, private registry auth, or local `.env`.
 - `composer.lock` is ignored; CI resolves dependencies for the selected matrix.
