@@ -6,12 +6,12 @@ and `make:chart` stubs for Blade, JSON, and Vue output.
 
 ## Repository Structure
 
-- `.github/workflows/` GitHub Actions CI and Release Please workflow.
-- `.idea/`, `.vscode/` tracked editor metadata; do not clean up casually.
-- `.phpunit.cache/`, `bootstrap/cache/`, `build/`, `storage/` tracked generated
-  or test artifacts; leave intact unless asked for repo hygiene.
+- `.agents/skills/` repo-owned agent skills; `.claude/skills` and `CLAUDE.md`
+  are symlinks to `.agents/skills/` and `AGENTS.md`, so edit the targets.
+- `.github/` CI, Release Please, and Dependabot configuration.
 - `config/` publishable `larapex-charts.php` config.
-- `resources/boost/` Laravel Boost package resources, including package skill.
+- `resources/boost/` Laravel Boost resources, including the distributed
+  consumer skill.
 - `src/` package source, chart classes, facade, contracts, traits, command, and
   command fallback stubs.
 - `stubs/` publishable public asset, Blade views, command stubs, and app stubs.
@@ -19,53 +19,20 @@ and `make:chart` stubs for Blade, JSON, and Vue output.
 
 ## Build & Development Commands
 
-Install dependencies:
+Run `composer install` once. The full local gate mirrors CI order and changes no
+files:
 
 ```bash
-composer install
+vendor/bin/rector process --dry-run && composer lint:test && composer test:types && composer test
 ```
 
-Validate Composer metadata:
+Other `composer.json` scripts: `lint` (Pint, rewrites files), `refactor`
+(Rector, rewrites files), and `test-coverage` (HTML report in `coverage/`).
+Before dependency metadata changes, run
+`composer validate --no-check-publish --strict`.
 
-```bash
-composer validate --no-check-publish --strict
-```
-
-Run tests:
-
-```bash
-composer test
-vendor/bin/phpunit
-```
-
-Run PHPStan static analysis at level 8:
-
-```bash
-composer test:types
-vendor/bin/phpstan analyse --memory-limit=1G
-```
-
-Run Rector in dry-run mode:
-
-```bash
-composer refactor -- --dry-run
-vendor/bin/rector --dry-run
-```
-
-Run Laravel Pint:
-
-```bash
-composer lint
-composer lint:test
-```
-
-Generate HTML coverage:
-
-```bash
-composer test-coverage
-```
-
-Run a local CI-matrix slice:
+Run a local CI-matrix slice. The first command edits `composer.json`, so restore
+it before committing:
 
 ```bash
 composer require \
@@ -78,9 +45,7 @@ composer update --prefer-stable --prefer-dist --no-interaction
 vendor/bin/phpunit
 ```
 
-> TODO: No dev server, debug command, or deploy command is configured. Laravel
-> Pint is configured as the formatter/linter, and Rector is configured as an
-> automated refactoring tool.
+> TODO: No dev server, debug command, or deploy command is configured.
 
 ## Code Style & Conventions
 
@@ -96,8 +61,9 @@ vendor/bin/phpunit
   `ComplexChartDataAggregator`.
 - Preserve public names and return shapes for `container()`, `script()`,
   `toJson()`, and `toVue()` unless the task explicitly changes API behavior.
-- Laravel Pint is the configured formatter/linter; no commit message template
-  exists.
+- Commit messages follow Conventional Commits (`feat:`, `fix:`, `docs:`, `ci:`,
+  `chore:`). Release Please derives versions and `CHANGELOG.md` from them, so
+  `CHANGELOG.md` and `.release-please-manifest.json` change only in release PRs.
 
 ## Architecture Notes
 
@@ -123,12 +89,14 @@ registers `make:chart`.
 
 `LarapexChart` owns shared chart state, factory methods, and output builders.
 Factories return independent subclasses for specific ApexCharts types. Blade,
-JSON, and Vue output come from the same chart state.
+JSON, and Vue output come from the same chart state through builders that
+diverge per surface. Before changing a setter, output builder, chart type, or
+stub, read `.agents/skills/larapex-chart-api/SKILL.md`.
 
-Two stub trees are intentionally separate. `src/stubs/charts` is command
-fallback for `WithModelStub`. `stubs/stubs/charts` is published into consuming
-apps. They are tracked and not identical; do not deduplicate or sync them unless
-testing both command fallback and publish behavior.
+Two stub trees are separate. `src/stubs/charts` is command fallback for
+`WithModelStub`. `stubs/stubs/charts` is published into consuming apps. They
+have drifted; change either only with tests for both command fallback and
+publish behavior.
 
 ## Testing Strategy
 
@@ -157,7 +125,6 @@ testing both command fallback and publish behavior.
 - No secrets or `.env` files are required for normal package work.
 - Do not commit credentials, tokens, private registry auth, or local `.env`.
 - `composer.lock` is ignored; CI resolves dependencies for the selected matrix.
-- Run Composer validation before dependency metadata changes.
 - If blocked by a bug/gap in a dependency owned by `gigerit` (`gigerit/*`,
   `@gigerit/*`, or author/provider/creator starts with `gigerit`), do not patch
   around it here. Stop and report package, version, blocker, expected/actual,
@@ -179,13 +146,15 @@ testing both command fallback and publish behavior.
 - `make:chart` or generated-example changes need tests for published stubs and
   package fallback stubs.
 - Do not add tooling, generated files, or broad refactors unless requested.
-- Documentation placement: update `README.md` for user-facing behavior changes;
-  use root `AGENTS.md` only for durable repo-wide guidance; use scoped skills
-  for bounded subsystem knowledge; use code comments only for non-obvious local
-  behavior.
-- Before finalizing, verify `AGENTS.md`, `README.md`, repo-owned skills under
-  `.agents/skills`, and code comments need no further update. Avoid duplicate
-  docs; place new docs at the narrowest correct level.
+- Documentation placement: user-facing behavior changes update both
+  `README.md` and the distributed consumer skill
+  `resources/boost/skills/larapex-charts-development/SKILL.md`; use root
+  `AGENTS.md` only for durable repo-wide guidance; use skills under
+  `.agents/skills` for bounded subsystem knowledge; use code comments only for
+  non-obvious local behavior.
+- Before finalizing, verify `AGENTS.md`, `README.md`, the consumer skill,
+  repo-owned skills under `.agents/skills`, and code comments need no further
+  update. Avoid duplicate docs; place new docs at the narrowest correct level.
 
 ## Extensibility Hooks
 
