@@ -16,15 +16,15 @@ How chart state becomes ApexCharts options in `src/LarapexChart.php`, and every 
 
 ## Output pipeline
 
-`apexOptions()` builds the shared top-level options, where `legend.show` is the string `'true'`/`'false'`. Each surface supplies its own `chart` block, and the three blocks diverge:
+`apexOptions()` builds the shared top-level options. Each surface supplies its own `chart` block:
 
-| Surface | Entry point | `chart` block | Notable differences |
+| Surface | Entry point | `chart` block | Differences |
 | --- | --- | --- | --- |
-| Blade | `script()` → `stubs/resources/views/chart/script.blade.php` → `toScriptOptions()` | `scriptChartOptions()` | `fontFamily` as configured; `stacked` only when true; `legend.show` overridden to a bool |
-| JSON | `toJson()` | `jsonChartOptions()` | `fontFamily` decodes to `null`; `sparkline` left as an encoded string |
-| Vue | `toVue()` | `vueChartOptions()` | `fontFamily` decodes to `null`; no `type`/`width` in `chart`; series returned beside `options` |
+| Blade | `script()` → `stubs/resources/views/chart/script.blade.php` → `toScriptOptions()` | `scriptChartOptions()` | `stacked` only when true |
+| JSON | `toJson()` | `jsonChartOptions()` | none |
+| Vue | `toVue()` | `vueChartOptions()` | no `type`/`width` in `chart`; series returned beside `options` |
 
-These legacy quirks are locked by golden-shape tests in `tests/Feature/ChartsTest.php`: `it_tests_to_json_preserves_configured_option_shape`, `it_tests_to_vue_preserves_configured_option_shape`, and `it_tests_script_render_preserves_configured_options_without_duplicate_yaxis`, all built from `chartWithConfiguredOutputOptions()`. Changing a locked value changes public output: change one only when the task asks for it, update its golden assertion in the same change, and describe the output change in the commit message.
+ApexCharts reads options by truthiness, so every surface must emit real booleans and objects: the string `'false'` or an encoded JSON string silently enables or ignores an option. Golden-shape tests in `tests/Feature/ChartsTest.php` (`it_tests_to_json_preserves_configured_option_shape`, `it_tests_to_vue_preserves_configured_option_shape`, and `it_tests_script_render_preserves_configured_options_without_duplicate_yaxis`, all built from `chartWithConfiguredOutputOptions()`) pin each surface's full output. A change to public output updates its golden assertion in the same commit, and the commit message describes it.
 
 ## Adding or changing an option
 

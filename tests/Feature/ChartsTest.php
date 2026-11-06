@@ -354,9 +354,9 @@ final class ChartsTest extends TestCase
             'width' => 640,
             'toolbar' => ['show' => true],
             'zoom' => ['enabled' => false],
-            'fontFamily' => null,
+            'fontFamily' => 'Inter, sans-serif',
             'foreColor' => config('larapex-charts.font_color'),
-            'sparkline' => '{"enabled":true}',
+            'sparkline' => ['enabled' => true],
             'stacked' => true,
         ], $options['chart']);
         $this->assertEquals(['bar' => ['horizontal' => true]], $options['plotOptions']);
@@ -374,7 +374,7 @@ final class ChartsTest extends TestCase
         $this->assertEquals(['min' => 0, 'max' => 100, 'tickAmount' => 5, 'show' => false], $options['yaxis']);
         $this->assertEquals(['show' => false], $options['grid']);
         $this->assertEquals(['show' => false], $options['markers']);
-        $this->assertEquals(['show' => 'false'], $options['legend']);
+        $this->assertSame(['show' => false], $options['legend']);
         $this->assertEquals([
             'hover' => ['filter' => ['type' => LarapexChart::STATE_NONE]],
             'active' => [
@@ -409,7 +409,7 @@ final class ChartsTest extends TestCase
         $this->assertEquals(320, $options['chart']['height']);
         $this->assertEquals((object) ['show' => true], $options['chart']['toolbar']);
         $this->assertEquals((object) ['enabled' => false], $options['chart']['zoom']);
-        $this->assertNull($options['chart']['fontFamily']);
+        $this->assertSame('Inter, sans-serif', $options['chart']['fontFamily']);
         $this->assertEquals(config('larapex-charts.font_color'), $options['chart']['foreColor']);
         $this->assertEquals((object) ['enabled' => true], $options['chart']['sparkline']);
         $this->assertTrue($options['chart']['stacked']);
@@ -427,7 +427,7 @@ final class ChartsTest extends TestCase
         $this->assertEquals((object) ['min' => 0, 'max' => 100, 'tickAmount' => 5, 'show' => false], $options['yaxis']);
         $this->assertEquals((object) ['show' => false], $options['grid']);
         $this->assertEquals((object) ['show' => false], $options['markers']);
-        $this->assertEquals(['show' => 'false'], $options['legend']);
+        $this->assertSame(['show' => false], $options['legend']);
         $this->assertEquals([
             'hover' => ['filter' => ['type' => LarapexChart::STATE_NONE]],
             'active' => [
@@ -460,6 +460,7 @@ final class ChartsTest extends TestCase
         $this->assertSame('640', $options['chart']['width']);
         $this->assertEquals((object) ['show' => true], $options['chart']['toolbar']);
         $this->assertEquals((object) ['enabled' => false], $options['chart']['zoom']);
+        $this->assertSame('Inter, sans-serif', $options['chart']['fontFamily']);
         $this->assertEquals((object) ['enabled' => true], $options['chart']['sparkline']);
         $this->assertTrue($options['chart']['stacked']);
         $this->assertEquals(['bar' => (object) ['horizontal' => true]], $options['plotOptions']);
@@ -511,6 +512,7 @@ final class ChartsTest extends TestCase
             ->setToolbar(true, false)
             ->setDataLabels(true)
             ->setTheme('dark')
+            ->setFontFamily('Inter, sans-serif')
             ->setSparkline(true)
             ->setShowLegend(false)
             ->setStatesHover(LarapexChart::STATE_NONE)

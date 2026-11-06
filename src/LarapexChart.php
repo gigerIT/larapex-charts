@@ -691,7 +691,7 @@ class LarapexChart
         $options['grid'] = $this->decode($this->grid());
         $options['markers'] = $this->decode($this->markers());
         $options['legend'] = [
-            'show' => $this->showLegend(),
+            'show' => $this->shouldShowLegend(),
         ];
         $options['states'] = $this->states()['states'];
 
@@ -722,9 +722,9 @@ class LarapexChart
             'width' => $this->width(),
             'toolbar' => $this->decode($this->toolbar()),
             'zoom' => $this->decode($this->zoom()),
-            'fontFamily' => $this->decode($this->fontFamily()),
+            'fontFamily' => $this->fontFamily(),
             'foreColor' => $this->foreColor(),
-            'sparkline' => $this->sparkline(),
+            'sparkline' => $this->decode($this->sparkline()),
             'stacked' => $this->stacked(),
         ];
     }
@@ -739,7 +739,7 @@ class LarapexChart
             'height' => $this->height(),
             'toolbar' => $this->decode($this->toolbar()),
             'zoom' => $this->decode($this->zoom()),
-            'fontFamily' => $this->decode($this->fontFamily()),
+            'fontFamily' => $this->fontFamily(),
             'foreColor' => $this->foreColor(),
             'sparkline' => $this->decode($this->sparkline()),
             'stacked' => $this->stacked(),
@@ -788,10 +788,7 @@ class LarapexChart
      */
     public function toScriptOptions(): array
     {
-        $options = $this->apexOptions($this->scriptChartOptions(), true);
-        $options['legend']['show'] = $this->shouldShowLegend();
-
-        return $options;
+        return $this->apexOptions($this->scriptChartOptions(), true);
     }
 
     public function toJson(): JsonResponse
