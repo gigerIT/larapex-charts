@@ -8,17 +8,18 @@ trait HasOptions
     protected ?array $options = null;
 
     /**
-     * Get the value of options
+     * Get the ApexCharts options toJson() sends, including setOptions() overrides.
      *
      * @return array<string, mixed>
      */
     public function getOptions(): array
     {
-        return $this->options ? $this->replaceOptions($this->getDefaultOption(), $this->options) : $this->getDefaultOption();
+        return $this->apexOptions($this->jsonChartOptions(), true);
     }
 
     /**
-     * Set the value of options
+     * Merge raw ApexCharts options over the generated options of every output.
+     * Nested option objects merge key by key; lists and scalars replace.
      *
      * @param  array<string, mixed>  $options
      */
@@ -37,12 +38,15 @@ trait HasOptions
     private function replaceOptions(array $defaults, array $overrides): array
     {
         foreach ($overrides as $key => $value) {
-            if (
-                $this->isAssociativeArray($value)
-                && isset($defaults[$key])
-                && $this->isAssociativeArray($defaults[$key])
-            ) {
-                $defaults[$key] = $this->replaceOptions($defaults[$key], $value);
+            $current = $defaults[$key] ?? null;
+
+            // Generated options hold decoded JSON objects; merge into them as arrays.
+            if ($current instanceof \stdClass) {
+                $current = get_object_vars($current);
+            }
+
+            if ($this->isAssociativeArray($value) && $this->isAssociativeArray($current)) {
+                $defaults[$key] = $this->replaceOptions($current, $value);
 
                 continue;
             }
@@ -59,41 +63,5 @@ trait HasOptions
     private function isAssociativeArray(mixed $value): bool
     {
         return is_array($value) && ! array_is_list($value);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function getDefaultOption(): array
-    {
-        return [
-            'chart' => [
-                'type' => $this->type(),
-                'height' => $this->height(),
-                'width' => $this->width(),
-                'toolbar' => $this->decode($this->toolbar()),
-                'zoom' => $this->decode($this->zoom()),
-                'fontFamily' => $this->decode($this->fontFamily()),
-                'foreColor' => $this->foreColor(),
-            ],
-            'plotOptions' => [
-                'bar' => $this->decode($this->horizontal()),
-            ],
-            'colors' => $this->decode($this->colors()),
-            'series' => $this->decode($this->dataset()),
-            'dataLabels' => $this->decode($this->dataLabels()),
-            'title' => [
-                'text' => $this->title(),
-            ],
-            'subtitle' => [
-                'text' => $this->subtitle() ?: '',
-                'align' => $this->subtitlePosition() ?: '',
-            ],
-            'xaxis' => [
-                'categories' => $this->decode($this->xAxis()),
-            ],
-            'grid' => $this->decode($this->grid()),
-            'markers' => $this->decode($this->markers()),
-        ];
     }
 }

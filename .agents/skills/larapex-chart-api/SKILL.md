@@ -16,7 +16,7 @@ How chart state becomes ApexCharts options in `src/LarapexChart.php`, and every 
 
 ## Output pipeline
 
-`apexOptions()` builds the shared top-level options. Each surface supplies its own `chart` block:
+`apexOptions()` builds the shared top-level options and ends by merging `setOptions()` overrides through `HasOptions::replaceOptions()`; `getOptions()` returns the JSON surface's options. Each surface supplies its own `chart` block:
 
 | Surface | Entry point | `chart` block | Differences |
 | --- | --- | --- | --- |

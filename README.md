@@ -157,6 +157,22 @@ radial, and polar area charts take one `addData([...])` call plus
 `setLabels([...])`; the others take one `addData([...], 'Series name')` call per
 series.
 
+### Custom ApexCharts options
+
+Use `setOptions()` for ApexCharts options without a dedicated setter. They merge
+over the generated options of Blade, JSON, and Vue output: nested objects merge
+key by key, while lists and scalar values replace the generated ones.
+
+```php
+$chart = LarapexChart::areaChart()
+    ->addData([250, 700, 1200], 'Active Users')
+    ->setXAxis(['Jan', 'Feb', 'Mar'])
+    ->setOptions([
+        'tooltip' => ['enabled' => false],
+        'xaxis' => ['labels' => ['rotate' => -45]],
+    ]);
+```
+
 ## More examples
 
 Check the documentation on: [Larapex Chart Docs](https://larapex-charts.netlify.app/)

@@ -475,6 +475,46 @@ final class ChartsTest extends TestCase
     }
 
     #[Test]
+    public function it_tests_set_options_merge_into_every_output(): void
+    {
+        $chart = (new LarapexChart)->areaChart()
+            ->addData([1, 2], 'Series')
+            ->setXAxis(['a', 'b'])
+            ->setToolbar(true)
+            ->setOptions([
+                'tooltip' => ['enabled' => false],
+                'chart' => [
+                    'foreColor' => '#ffffff',
+                    'toolbar' => ['tools' => ['download' => false]],
+                ],
+                'xaxis' => ['labels' => ['rotate' => -45]],
+                'colors' => ['#abcdef'],
+            ]);
+
+        $outputs = [
+            'blade' => $chart->toScriptOptions(),
+            'json' => $chart->toJson()->getData(true)['options'],
+            'vue' => $chart->toVue()['options'],
+        ];
+
+        foreach ($outputs as $surface => $options) {
+            $options = json_decode(json_encode($options, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
+            $this->assertSame(['enabled' => false], $options['tooltip'], $surface);
+            $this->assertSame('#ffffff', $options['chart']['foreColor'], $surface);
+            $this->assertSame(['show' => true, 'tools' => ['download' => false]], $options['chart']['toolbar'], $surface);
+            $this->assertSame(['a', 'b'], $options['xaxis']['categories'], $surface);
+            $this->assertSame(['show' => true, 'rotate' => -45], $options['xaxis']['labels'], $surface);
+            $this->assertSame(['#abcdef'], $options['colors'], $surface);
+        }
+
+        $this->assertStringContainsString('tooltip', $chart->script()->render());
+        $this->assertSame(
+            $outputs['json'],
+            json_decode(json_encode($chart->getOptions(), JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR),
+        );
+    }
+
+    #[Test]
     public function it_tests_script_render_json_encodes_user_content_safely(): void
     {
         $chart = (new LarapexChart)->barChart()

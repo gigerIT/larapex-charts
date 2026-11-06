@@ -117,6 +117,7 @@ Common chart-level setters:
 - `setStacked(true)` for line, area, bar, and horizontal bar charts.
 - `setStatesHover(LarapexChart::STATE_*)` and `setStatesActive(LarapexChart::STATE_*, $allowMultipleSelections)` for hover/active filters. State constants are `STATE_DARKEN`, `STATE_LIGHTEN`, and `STATE_NONE`.
 - `setStroke($width, $colors = [], $curve = 'straight')`, `setToolbar($show, $zoom = true)`, and `setTheme($theme)` when the target ApexCharts option is supported by the package.
+- `setOptions([...])` for ApexCharts options without a setter, such as tooltips, annotations, or axis formatting. The array merges over the generated options of Blade, JSON, and Vue output: nested objects key by key, lists and scalars replacing.
 
 ## Generated Chart Classes
 

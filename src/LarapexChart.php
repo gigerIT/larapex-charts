@@ -707,7 +707,7 @@ class LarapexChart
             $options['yaxis'] = $this->decode($this->yAxis());
         }
 
-        return $options;
+        return $this->options === null ? $options : $this->replaceOptions($options, $this->options);
     }
 
     /**
