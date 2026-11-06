@@ -9,7 +9,7 @@ class {{ class }}
     public function build(): \Illuminate\Http\JsonResponse
     {
         return (new LarapexChart)->heatMapChart()
-            ->setTitle('Basic radar chart')
+            ->setTitle('Basic heatmap chart')
             ->addData([80, 50, 30, 40, 100, 20], 'Sales')
             ->addData([70, 10, 80, 20, 60, 40], 'Income')
             ->setMarkers(['#FFA41B', '#4F46E5'], 7, 10)
