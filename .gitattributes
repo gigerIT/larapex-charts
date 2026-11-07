@@ -3,6 +3,7 @@
 /.phpunit.cache export-ignore
 /.vscode export-ignore
 /build export-ignore
+/docs export-ignore
 /storage export-ignore
 /tests export-ignore
 /AGENTS.md export-ignore

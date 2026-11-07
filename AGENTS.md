@@ -10,6 +10,8 @@ and `make:chart` stubs for Blade, JSON, and Vue output.
   are symlinks to `.agents/skills/` and `AGENTS.md`, so edit the targets.
 - `.github/` CI, Release Please, and Dependabot configuration.
 - `config/` publishable `larapex-charts.php` config.
+- `docs/adr/` architecture decision records; check them before proposing a
+  structural refactor.
 - `resources/boost/` Laravel Boost resources, including the distributed
   consumer skill.
 - `src/` package source, chart classes, facade, contracts, traits, command, and
