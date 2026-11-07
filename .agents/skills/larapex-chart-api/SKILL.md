@@ -16,23 +16,23 @@ How chart state becomes ApexCharts options in `src/LarapexChart.php`, and every 
 
 ## Output pipeline
 
-`apexOptions()` builds the shared top-level options and ends by merging `setOptions()` overrides through `HasOptions::replaceOptions()`; `getOptions()` returns the JSON surface's options. Each surface supplies its own `chart` block:
+`apexOptions()` is the only options builder. It builds the full ApexCharts options, `chart` block and `series` included, then merges `setOptions()` overrides through `replaceOptions()`. Every output projects that one array:
 
-| Surface | Entry point | `chart` block | Differences |
-| --- | --- | --- | --- |
-| Blade | `script()` → `stubs/resources/views/chart/script.blade.php` → `toScriptOptions()` | `scriptChartOptions()` | `stacked` only when true |
-| JSON | `toJson()` | `jsonChartOptions()` | none |
-| Vue | `toVue()` | `vueChartOptions()` | no `type`/`width` in `chart`; series returned beside `options`; the top-level `height`/`width`/`type`/`series` props override `options` in `vue3-apexcharts`, so they carry `setOptions()` overrides |
+| Output | Entry point | Projection |
+| --- | --- | --- |
+| Blade | `script()` → `stubs/resources/views/chart/script.blade.php` → `toScriptOptions()` | the options whole |
+| JSON | `toJson()`; `getOptions()` returns the same options | `{id, options}` |
+| Vue | `toVue()` | `height`, `width`, `type`, and `series` lifted from the merged options as props, which take precedence in `vue3-apexcharts`; `options` without `series` |
 
-ApexCharts reads options by truthiness, so every surface must emit real booleans and objects: the string `'false'` or an encoded JSON string silently enables or ignores an option. Golden-shape tests in `tests/Feature/ChartsTest.php` (`it_tests_to_json_preserves_configured_option_shape`, `it_tests_to_vue_preserves_configured_option_shape`, and `it_tests_script_render_preserves_configured_options_without_duplicate_yaxis`, all built from `chartWithConfiguredOutputOptions()`) pin each surface's full output. A change to public output updates its golden assertion in the same commit, and the commit message describes it.
+ApexCharts reads options by truthiness, so outputs must carry real booleans and objects: the string `'false'` or an encoded JSON string silently enables or ignores an option. `it_tests_configured_chart_builds_every_apex_option` and `it_tests_default_chart_builds_default_apex_options` in `tests/Feature/ChartsTest.php` pin the full options as JSON delivers them; one short test per output pins its projection. A change to public output updates the golden assertion in the same commit, and the commit message describes it.
 
 ## Adding or changing an option
 
 Done means every step below is satisfied:
 
 1. Property with a constructor default; setter returning the instance, with PHPStan array shapes on array params.
-2. Wire it into `apexOptions()` when all surfaces share it, or into each relevant `*ChartOptions()` builder when it belongs in the `chart` block. Decide per surface; a missed builder fails silently.
-3. Set it in `chartWithConfiguredOutputOptions()` and assert it in all three golden-shape tests, plus a default-state assertion in `tests/Unit/ChartsTest.php`.
+2. Wire it into `apexOptions()`; every output picks it up.
+3. Set it in `chartWithConfiguredOutputOptions()` and assert it in both golden tests.
 4. Document it in `README.md` and in the Boost skill's setter list.
 
 ## Adding a chart type

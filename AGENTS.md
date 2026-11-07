@@ -87,11 +87,11 @@ flowchart TD
 from `stubs/resources/views`, publishes config/assets/views/stubs, and
 registers `make:chart`.
 
-`LarapexChart` owns shared chart state, factory methods, and output builders.
+`LarapexChart` owns shared chart state, factory methods, and outputs.
 Factories return independent subclasses for specific ApexCharts types. Blade,
-JSON, and Vue output come from the same chart state through builders that
-diverge per surface. Before changing a setter, output builder, chart type, or
-stub, read `.agents/skills/larapex-chart-api/SKILL.md`.
+JSON, and Vue output all project one options array built by `apexOptions()`.
+Before changing a setter, output, chart type, or stub, read
+`.agents/skills/larapex-chart-api/SKILL.md`.
 
 `src/stubs/charts` is the single source of `make:chart` stubs: `WithModelStub`
 falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
@@ -189,7 +189,7 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 - `.github/workflows/ci.yml` CI matrix and Release Please workflow.
 - `release-please-config.json` and `.release-please-manifest.json` release setup.
 - `config/larapex-charts.php` configurable defaults.
-- `src/LarapexChart.php` fluent chart API and output builders.
+- `src/LarapexChart.php` fluent chart API, options builder, and outputs.
 - `src/LarapexChartsServiceProvider.php` bindings, publish tags, and views.
 - `src/Console/ChartMakeCommand.php` generated chart behavior.
 

@@ -2,7 +2,6 @@
 
 namespace ArielMejiaDev\LarapexCharts;
 
-use ArielMejiaDev\LarapexCharts\Traits\HasOptions;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\View;
@@ -12,8 +11,6 @@ use Illuminate\Support\Facades\View;
  */
 class LarapexChart
 {
-    use HasOptions;
-
     const COLOR_OCEAN_BLUE = '#008FFB';
 
     const COLOR_MINT_GREEN = '#00E396';
@@ -116,6 +113,9 @@ class LarapexChart
 
     /** @var array{hover?: array{filter: array{type: string}}, active?: array{allowMultipleDataPointsSelection: bool, filter: array{type: string}}} */
     private array $states = [];
+
+    /** @var array<string, mixed>|null */
+    protected ?array $options = null;
 
     /*
     |--------------------------------------------------------------------------
@@ -462,6 +462,19 @@ class LarapexChart
         return $this;
     }
 
+    /**
+     * Merge raw ApexCharts options over the generated options of every output.
+     * Nested option objects merge key by key; lists and scalars replace.
+     *
+     * @param  array<string, mixed>  $options
+     */
+    public function setOptions(array $options): self
+    {
+        $this->options = $options;
+
+        return $this;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Getters
@@ -659,33 +672,100 @@ class LarapexChart
 
     /*
     |--------------------------------------------------------------------------
-    | JSON Options Builder
+    | Outputs
+    |--------------------------------------------------------------------------
+    |
+    | Every output is built from apexOptions(): Blade and JSON emit the
+    | options whole, and toVue() lifts the component props out of them.
+    |
+    */
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toScriptOptions(): array
+    {
+        return $this->apexOptions();
+    }
+
+    /**
+     * Get the ApexCharts options of every output, including setOptions() overrides.
+     *
+     * @return array<string, mixed>
+     */
+    public function getOptions(): array
+    {
+        return $this->apexOptions();
+    }
+
+    public function toJson(): JsonResponse
+    {
+        return response()->json([
+            'id' => $this->id(),
+            'options' => $this->apexOptions(),
+        ]);
+    }
+
+    /**
+     * The Vue component's height, width, type, and series props take precedence
+     * over the same keys in options, so they are lifted from the merged options
+     * and carry any setOptions() overrides. Series is not sent twice.
+     *
+     * @return array{height: int|string, width: int|string, type: string, options: array<string, mixed>, series: mixed}
+     */
+    public function toVue(): array
+    {
+        $options = $this->apexOptions();
+        $series = $options['series'] ?? null;
+        unset($options['series']);
+        $chart = is_array($options['chart'] ?? null) ? $options['chart'] : [];
+
+        return [
+            'height' => $chart['height'] ?? $this->height(),
+            'width' => $chart['width'] ?? $this->width(),
+            'type' => $chart['type'] ?? $this->type(),
+            'options' => $options,
+            'series' => $series,
+        ];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ApexCharts Options Builder
     |--------------------------------------------------------------------------
     */
 
     /**
-     * @param  array<string, mixed>  $chartOptions
      * @return array<string, mixed>
      */
-    private function apexOptions(array $chartOptions, bool $includeSeries = false): array
+    private function apexOptions(): array
     {
+        $chart = [
+            'id' => $this->id(),
+            'type' => $this->type(),
+            'height' => $this->height(),
+            'width' => $this->width(),
+            'toolbar' => $this->decode($this->toolbar()),
+            'zoom' => $this->decode($this->zoom()),
+            'fontFamily' => $this->fontFamily(),
+            'sparkline' => $this->decode($this->sparkline()),
+            'stacked' => $this->stacked(),
+        ];
+
         if ($this->foreColor !== null) {
-            $chartOptions['foreColor'] = $this->foreColor;
+            $chart['foreColor'] = $this->foreColor;
         }
 
         $options = [
-            'chart' => $chartOptions,
+            'chart' => $chart,
             'plotOptions' => [
                 'bar' => $this->decode($this->horizontal()),
             ],
             'colors' => $this->decode($this->colors()),
+            'series' => $this->decode($this->dataset()),
+            'dataLabels' => $this->decode($this->dataLabels()),
         ];
 
-        if ($includeSeries) {
-            $options['series'] = $this->decode($this->dataset());
-        }
-
-        $options['dataLabels'] = $this->decode($this->dataLabels());
         if ($this->theme !== null) {
             $options['theme'] = [
                 'mode' => $this->theme,
@@ -696,8 +776,8 @@ class LarapexChart
             'text' => $this->title(),
         ];
         $options['subtitle'] = [
-            'text' => $this->subtitle() ?: '',
-            'align' => $this->subtitlePosition() ?: '',
+            'text' => $this->subtitle(),
+            'align' => $this->subtitlePosition(),
         ];
         $options['xaxis'] = $this->decode($this->xAxis());
         $options['yaxis'] = [
@@ -716,11 +796,11 @@ class LarapexChart
             $options['labels'] = $this->labels();
         }
 
-        if ($this->stroke() !== '' && $this->stroke() !== '0') {
+        if ($this->stroke() !== '') {
             $options['stroke'] = $this->decode($this->stroke());
         }
 
-        if ($this->yAxis() !== '' && $this->yAxis() !== '0') {
+        if ($this->yAxis() !== '') {
             $options['yaxis'] = $this->decode($this->yAxis());
         }
 
@@ -728,60 +808,38 @@ class LarapexChart
     }
 
     /**
+     * @param  array<string, mixed>  $defaults
+     * @param  array<string, mixed>  $overrides
      * @return array<string, mixed>
      */
-    private function jsonChartOptions(): array
+    private function replaceOptions(array $defaults, array $overrides): array
     {
-        return [
-            'id' => $this->id(),
-            'type' => $this->type(),
-            'height' => $this->height(),
-            'width' => $this->width(),
-            'toolbar' => $this->decode($this->toolbar()),
-            'zoom' => $this->decode($this->zoom()),
-            'fontFamily' => $this->fontFamily(),
-            'sparkline' => $this->decode($this->sparkline()),
-            'stacked' => $this->stacked(),
-        ];
-    }
+        foreach ($overrides as $key => $value) {
+            $current = $defaults[$key] ?? null;
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function vueChartOptions(): array
-    {
-        return [
-            'id' => $this->id(),
-            'height' => $this->height(),
-            'toolbar' => $this->decode($this->toolbar()),
-            'zoom' => $this->decode($this->zoom()),
-            'fontFamily' => $this->fontFamily(),
-            'sparkline' => $this->decode($this->sparkline()),
-            'stacked' => $this->stacked(),
-        ];
-    }
+            // Generated options hold decoded JSON objects; merge into them as arrays.
+            if ($current instanceof \stdClass) {
+                $current = get_object_vars($current);
+            }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function scriptChartOptions(): array
-    {
-        $options = [
-            'id' => $this->id(),
-            'type' => $this->type(),
-            'height' => $this->height(),
-            'width' => $this->width(),
-            'toolbar' => $this->decode($this->toolbar()),
-            'zoom' => $this->decode($this->zoom()),
-            'fontFamily' => $this->fontFamily(),
-            'sparkline' => $this->decode($this->sparkline()),
-        ];
+            if ($this->isAssociativeArray($value) && $this->isAssociativeArray($current)) {
+                $defaults[$key] = $this->replaceOptions($current, $value);
 
-        if ($this->stacked()) {
-            $options['stacked'] = $this->stacked();
+                continue;
+            }
+
+            $defaults[$key] = $value;
         }
 
-        return $options;
+        return $defaults;
+    }
+
+    /**
+     * @phpstan-assert-if-true array<string, mixed> $value
+     */
+    private function isAssociativeArray(mixed $value): bool
+    {
+        return is_array($value) && ! array_is_list($value);
     }
 
     /**
@@ -795,49 +853,5 @@ class LarapexChart
     protected function encode(mixed $value): string
     {
         return json_encode($value, JSON_THROW_ON_ERROR);
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function toScriptOptions(): array
-    {
-        return $this->apexOptions($this->scriptChartOptions(), true);
-    }
-
-    public function toJson(): JsonResponse
-    {
-        $options = $this->apexOptions($this->jsonChartOptions(), true);
-
-        return response()->json([
-            'id' => $this->id(),
-            'options' => $options,
-        ]);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Vue Options Builder
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * The Vue component's height, width, type, and series props take precedence
-     * over the same keys in options, so they carry any setOptions() overrides.
-     *
-     * @return array{height: int|string, width: int|string, type: string, options: array<string, mixed>, series: mixed}
-     */
-    public function toVue(): array
-    {
-        $options = $this->apexOptions($this->vueChartOptions());
-        $chart = is_array($options['chart'] ?? null) ? $options['chart'] : [];
-
-        return [
-            'height' => $chart['height'] ?? $this->height(),
-            'width' => $chart['width'] ?? $this->width(),
-            'type' => $chart['type'] ?? $this->type(),
-            'options' => $options,
-            'series' => $options['series'] ?? $this->decode($this->dataset()),
-        ];
     }
 }
