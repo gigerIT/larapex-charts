@@ -52,7 +52,8 @@ vendor/bin/phpunit
 - PHP namespace stays `ArielMejiaDev\LarapexCharts\` for source and public API.
 - Composer package is `gigerit/larapex-charts`; do not rename PHP imports to
   `Gigerit\...`.
-- Fluent setters mutate chart state and return the chart instance.
+- Fluent setters mutate chart state and return `static`, so chains keep the
+  chart subclass type that typed `make:chart` classes declare.
 - Chart subclasses stay thin: extend `LarapexChart`, set ApexCharts type in the
   constructor, and use the right data trait.
 - Simple charts implement `MustAddSimpleData` and use

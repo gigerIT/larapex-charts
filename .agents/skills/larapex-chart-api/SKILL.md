@@ -13,7 +13,7 @@ How chart state becomes ApexCharts options in `src/LarapexChart.php`, and every 
 - A setter stores only its own arguments. Values that combine several setters, such as the axis label flags inside `xaxis`/`yaxis`, are joined in `apexOptions()` (`xAxisOptions()`, `yAxisOptions()`), so setter order never matters.
 - Getters of object-valued options `encode()` the property on read, and return `''` for an unset optional one. Views published from releases before the options builder print those strings into their script, so keep the shapes; `it_tests_option_getters_return_encoded_json_for_published_views` pins them.
 - Defaults are set in the constructor, which reads `larapex-charts.*` config, as do `setMarkers()` and `setStroke()` when no colors are passed. A test that changes config must build its chart afterwards.
-- Setters mutate and return the instance. The `set*` methods return `LarapexChart` or `self`; match the neighbours.
+- Setters mutate and return the instance as `static`, as do the data traits' `addData()`. A wider return type breaks typed `build()` methods in generated chart classes; `lineChartThroughEverySetter()` in `tests/Feature/ChartsTest.php` makes `composer test:types` catch it, so chain every new setter there.
 
 ## Output pipeline
 

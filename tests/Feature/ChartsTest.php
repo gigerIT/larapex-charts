@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace ArielMejiaDev\LarapexCharts\Tests\Feature;
 
+use ArielMejiaDev\LarapexCharts\BarChart;
 use ArielMejiaDev\LarapexCharts\Facades\LarapexChart as LarapexChartFacade;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use ArielMejiaDev\LarapexCharts\LineChart;
 use ArielMejiaDev\LarapexCharts\Tests\TestCase;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Js;
@@ -265,6 +267,49 @@ final class ChartsTest extends TestCase
     }
 
     #[Test]
+    public function it_tests_fluent_setters_keep_the_chart_subclass_type(): void
+    {
+        $this->assertInstanceOf(LineChart::class, $this->lineChartThroughEverySetter());
+    }
+
+    /**
+     * The declared return type makes `composer test:types` fail when a setter
+     * widens the chart's type, which breaks typed make:chart classes in apps.
+     */
+    private function lineChartThroughEverySetter(): LineChart
+    {
+        return (new LarapexChart)->lineChart()
+            ->setFontFamily('Inter, sans-serif')
+            ->setFontColor('#101010')
+            ->setDataset([])
+            ->addData([1, 2], 'Series')
+            ->setHeight(300)
+            ->setWidth('50%')
+            ->setColors(['#111111'])
+            ->setMonochromeColor('#222222')
+            ->setHorizontal(false)
+            ->setTitle('Users')
+            ->setSubtitle('Monthly')
+            ->setLabels(['A', 'B'])
+            ->setXAxis(['Jan', 'Feb'])
+            ->setGrid()
+            ->setYAxis(0, 10)
+            ->setMarkers()
+            ->setStroke(2)
+            ->setToolbar(true)
+            ->setDataLabels()
+            ->setTheme('dark')
+            ->setSparkline()
+            ->setStacked()
+            ->setShowLegend()
+            ->setShowXAxisLabels()
+            ->setShowYAxisLabels()
+            ->setStatesHover()
+            ->setStatesActive()
+            ->setOptions([]);
+    }
+
+    #[Test]
     public function it_tests_multiple_charts_have_unique_ids_and_independent_data(): void
     {
         $chart1 = (new LarapexChart)->pieChart()
@@ -277,10 +322,10 @@ final class ChartsTest extends TestCase
             ->setXAxis(['Jan', 'Feb'])
             ->addData([30, 40], 'Series');
 
-        $this->assertNotEquals($chart1->id(), $chart2->id());
-        $this->assertNotEquals($chart1->type(), $chart2->type());
-        $this->assertNotEquals($chart1->title(), $chart2->title());
-        $this->assertNotEquals($chart1->dataset(), $chart2->dataset());
+        $this->assertNotSame($chart1->id(), $chart2->id());
+        $this->assertNotSame($chart1->type(), $chart2->type());
+        $this->assertNotSame($chart1->title(), $chart2->title());
+        $this->assertNotSame($chart1->dataset(), $chart2->dataset());
 
         $container1 = $chart1->container()->render();
         $container2 = $chart2->container()->render();
@@ -644,7 +689,7 @@ final class ChartsTest extends TestCase
         $this->assertStringContainsString('Quarter', $script);
     }
 
-    private function chartWithConfiguredOutputOptions(): LarapexChart
+    private function chartWithConfiguredOutputOptions(): BarChart
     {
         return (new LarapexChart)->barChart()
             ->setTitle('Revenue')

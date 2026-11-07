@@ -7,7 +7,7 @@ trait SimpleChartDataAggregator
     /**
      * @param  array<int, mixed>  $data
      */
-    public function addData(array $data): self
+    public function addData(array $data): static
     {
         $this->dataset = $data;
 
