@@ -41,6 +41,10 @@ class ChartMakeCommand extends GeneratorCommand
     #[\Override]
     public function handle(): ?bool
     {
+        if ($this->option('vue') && $this->option('json')) {
+            $this->fail('The --vue and --json options cannot be combined.');
+        }
+
         $this->askChartType();
 
         return parent::handle();

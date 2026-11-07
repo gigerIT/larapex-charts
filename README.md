@@ -76,7 +76,8 @@ composer require gigerit/larapex-charts
 ```
 
 The `make:chart` command is registered automatically; no command publishing is
-needed. The obsolete `larapex-charts-commands` publish tag has been removed.
+needed. Pass `--vue` or `--json` for a Vue or JSON chart class; the command
+rejects both together. The obsolete `larapex-charts-commands` publish tag has been removed.
 Use `larapex-charts-stubs` to publish customizable chart templates. Published
 stubs are copies that Composer updates do not touch; to pick up stub fixes after
 upgrading, republish them with

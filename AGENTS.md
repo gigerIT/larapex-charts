@@ -174,7 +174,7 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 - Consumers can publish config, views, local ApexCharts asset, and
   stubs through service-provider publish tags.
 - Config controls default font family, font color, and palette.
-- `make:chart` supports `--vue` and `--json`; custom app stubs from
+- `make:chart` supports `--vue` or `--json`, never both; custom app stubs from
   `base_path("stubs/charts/...")` win before package fallback stubs.
 - Default CDN helper returns `https://cdn.jsdelivr.net/npm/apexcharts@8`,
   pinned to the bundled asset's ApexCharts major.

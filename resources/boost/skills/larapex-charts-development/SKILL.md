@@ -130,7 +130,7 @@ php artisan make:chart MonthlyUsersChart --vue
 php artisan make:chart MonthlyUsersChart --json
 ```
 
-The command asks for a chart type and resolves custom app stubs from `stubs/charts/...` before falling back to the package stubs. The selectable types are Pie, Donut, Radial Bar, Polar Area, Line, Area, Bar, Horizontal Bar, Heatmap, and Radar.
+`--vue` and `--json` are mutually exclusive; passing both fails without writing a file. The command asks for a chart type and resolves custom app stubs from `stubs/charts/...` before falling back to the package stubs. The selectable types are Pie, Donut, Radial Bar, Polar Area, Line, Area, Bar, Horizontal Bar, Heatmap, and Radar.
 
 Generated chart classes live under `app/Charts` and can be injected into controllers:
 

@@ -151,6 +151,23 @@ final class ChartsTest extends TestCase
         $this->assertStringContainsString('->toJson()', File::get($path));
     }
 
+    #[Test]
+    public function it_tests_make_chart_rejects_vue_and_json_together(): void
+    {
+        $path = app_path('Charts/ConflictingChart.php');
+        File::delete($path);
+
+        $command = $this->artisan('make:chart', ['name' => 'ConflictingChart', '--vue' => true, '--json' => true]);
+        $this->assertInstanceOf(PendingCommand::class, $command);
+
+        $command
+            ->expectsOutputToContain('The --vue and --json options cannot be combined.')
+            ->assertExitCode(1);
+        $command->run();
+
+        $this->assertFileDoesNotExist($path);
+    }
+
     /**
      * @return iterable<string, array{string, string, string, class-string<LarapexChart>}>
      */
