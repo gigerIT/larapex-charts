@@ -94,7 +94,7 @@ JSON, and Vue output all project one options array built by `apexOptions()`.
 Before changing a setter, output, chart type, or stub, read
 `.agents/skills/larapex-chart-api/SKILL.md`.
 
-`src/stubs/charts` is the single source of `make:chart` stubs: `WithModelStub`
+`src/stubs/charts` is the single source of `make:chart` stubs: `ChartMakeCommand`
 falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 `stubs/charts`, whose copies take precedence.
 

@@ -46,4 +46,4 @@ Done means every step below is satisfied:
 
 ## Stubs
 
-`src/stubs/charts/` is the only stub source. `vendor:publish --tag=larapex-charts-stubs` copies it to an app's `stubs/charts/`, and `WithModelStub::resolveStubPath()` prefers that app copy before falling back to the package file. `it_tests_make_chart_generates_runnable_chart_classes` generates every stub through `make:chart` on both paths and runs its `build()`.
+`src/stubs/charts/` is the only stub source. `vendor:publish --tag=larapex-charts-stubs` copies it to an app's `stubs/charts/`, and `ChartMakeCommand::resolveStubPath()` prefers that app copy before falling back to the package file. `it_tests_make_chart_generates_runnable_chart_classes` generates every stub through `make:chart` on both paths and runs its `build()`.

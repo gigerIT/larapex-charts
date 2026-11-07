@@ -2,15 +2,12 @@
 
 namespace ArielMejiaDev\LarapexCharts\Console;
 
-use ArielMejiaDev\LarapexCharts\Traits\WithModelStub;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class ChartMakeCommand extends GeneratorCommand
 {
-    use WithModelStub;
-
     /** @var array<string, string> */
     protected array $chartTypes = [
         'Pie Chart' => 'PieChart',
@@ -88,6 +85,18 @@ class ChartMakeCommand extends GeneratorCommand
         $stub = sprintf('%s/%s.stub', $directory, $this->selectedChart);
 
         return $this->resolveStubPath($stub);
+    }
+
+    /**
+     * Prefer the app's published copy of a stub over the package's.
+     */
+    protected function resolveStubPath(string $stub): string
+    {
+        $customPath = base_path('stubs/charts/'.$stub);
+
+        $packagePath = __DIR__.'/../stubs/charts/'.$stub;
+
+        return file_exists($customPath) ? $customPath : $packagePath;
     }
 
     /**
