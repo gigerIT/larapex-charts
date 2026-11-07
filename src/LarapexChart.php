@@ -71,23 +71,30 @@ class LarapexChart
 
     protected ?string $foreColor;
 
-    protected string $dataset = '';
+    /** @var array<int|string, mixed>|null */
+    protected ?array $dataset = null;
 
     protected int $height = 500;
 
     protected string $width = '100%';
 
-    protected string $colors;
+    /** @var array<int|string, mixed> */
+    protected array $colors;
 
-    protected string $horizontal;
+    /** @var array{horizontal: bool} */
+    protected array $horizontal = ['horizontal' => false];
 
-    protected string $xAxis;
+    /** @var array{type: string, categories: array<int, string|int|float>, labels: array{show: bool}} */
+    protected array $xAxis;
 
-    protected string $yAxis = '';
+    /** @var array{min: int|float, max: int|float, tickAmount: int|float, show: bool}|null */
+    protected ?array $yAxis = null;
 
-    protected string $grid;
+    /** @var array<string, mixed> */
+    protected array $grid = ['show' => false];
 
-    protected string $markers;
+    /** @var array<string, mixed> */
+    protected array $markers = ['show' => false];
 
     protected bool $stacked = false;
 
@@ -97,17 +104,22 @@ class LarapexChart
 
     protected bool $showYAxisLabels = true;
 
-    protected string $stroke = '';
+    /** @var array{show: bool, width: int, colors: mixed, curve: string}|null */
+    protected ?array $stroke = null;
 
-    protected string $toolbar;
+    /** @var array{show: bool} */
+    protected array $toolbar = ['show' => false];
 
-    protected string $zoom;
+    /** @var array{enabled: bool} */
+    protected array $zoom = ['enabled' => true];
 
-    protected string $dataLabels;
+    /** @var array{enabled: bool} */
+    protected array $dataLabels = ['enabled' => false];
 
     protected ?string $theme = 'light';
 
-    protected string $sparkline;
+    /** @var array{enabled: bool} */
+    protected array $sparkline = ['enabled' => false];
 
     private string $chartLetters = 'abcdefghijklmnopqrstuvwxyz';
 
@@ -127,15 +139,8 @@ class LarapexChart
     {
         $repeatCount = (int) ceil(25 / strlen($this->chartLetters));
         $this->id = substr(str_shuffle(str_repeat($this->chartLetters, $repeatCount)), 1, 25);
-        $this->horizontal = $this->encode(['horizontal' => false]);
-        $this->colors = $this->encode(config('larapex-charts.colors'));
+        $this->colors = config('larapex-charts.colors');
         $this->setXAxis([]);
-        $this->grid = $this->encode(['show' => false]);
-        $this->markers = $this->encode(['show' => false]);
-        $this->toolbar = $this->encode(['show' => false]);
-        $this->zoom = $this->encode(['enabled' => true]);
-        $this->dataLabels = $this->encode(['enabled' => false]);
-        $this->sparkline = $this->encode(['enabled' => false]);
         $this->fontFamily = config('larapex-charts.font_family');
         $this->foreColor = config('larapex-charts.font_color');
     }
@@ -217,7 +222,7 @@ class LarapexChart
      */
     public function setDataset(array $dataset): LarapexChart
     {
-        $this->dataset = $this->encode($dataset);
+        $this->dataset = $dataset;
 
         return $this;
     }
@@ -241,21 +246,21 @@ class LarapexChart
      */
     public function setColors(array $colors): LarapexChart
     {
-        $this->colors = $this->encode($colors);
+        $this->colors = $colors;
 
         return $this;
     }
 
     public function setMonochromeColor(string $color): LarapexChart
     {
-        $this->colors = $this->encode([$color]);
+        $this->colors = [$color];
 
         return $this;
     }
 
     public function setHorizontal(bool $horizontal): LarapexChart
     {
-        $this->horizontal = $this->encode(['horizontal' => $horizontal]);
+        $this->horizontal = ['horizontal' => $horizontal];
 
         return $this;
     }
@@ -290,13 +295,13 @@ class LarapexChart
      */
     public function setXAxis(array $categories, string $type = 'category'): LarapexChart
     {
-        $this->xAxis = $this->encode([
+        $this->xAxis = [
             'type' => $type,
             'categories' => $categories,
             'labels' => [
                 'show' => $this->showXAxisLabels(),
             ],
-        ]);
+        ];
 
         return $this;
     }
@@ -307,14 +312,14 @@ class LarapexChart
      */
     public function setGrid($color = '#e5e5e5', $opacity = 0.1, int $strokeDashArray = 5): LarapexChart
     {
-        $this->grid = $this->encode([
+        $this->grid = [
             'show' => true,
             'strokeDashArray' => $strokeDashArray,
             'row' => [
                 'colors' => [$color, 'transparent'],
                 'opacity' => $opacity,
             ],
-        ]);
+        ];
 
         return $this;
     }
@@ -326,12 +331,12 @@ class LarapexChart
      */
     public function setYAxis($min, $max, ?int $tickAmount = null, $show = true): LarapexChart
     {
-        $this->yAxis = $this->encode([
+        $this->yAxis = [
             'min' => $min,
             'max' => $max,
             'tickAmount' => $tickAmount ?? $max,
             'show' => $show,
-        ]);
+        ];
 
         return $this;
     }
@@ -347,7 +352,7 @@ class LarapexChart
             $colors = config('larapex-charts.colors');
         }
 
-        $this->markers = $this->encode([
+        $this->markers = [
             'size' => $width,
             'colors' => $colors,
             'strokeColors' => '#fff',
@@ -355,7 +360,7 @@ class LarapexChart
             'hover' => [
                 'size' => $hoverSize,
             ],
-        ]);
+        ];
 
         return $this;
     }
@@ -369,27 +374,27 @@ class LarapexChart
             $colors = config('larapex-charts.colors');
         }
 
-        $this->stroke = $this->encode([
+        $this->stroke = [
             'show' => true,
             'width' => $width,
             'colors' => $colors,
             'curve' => $curve,
-        ]);
+        ];
 
         return $this;
     }
 
     public function setToolbar(bool $show, bool $zoom = true): LarapexChart
     {
-        $this->toolbar = $this->encode(['show' => $show]);
-        $this->zoom = $this->encode(['enabled' => $zoom]);
+        $this->toolbar = ['show' => $show];
+        $this->zoom = ['enabled' => $zoom];
 
         return $this;
     }
 
     public function setDataLabels(bool $enabled = true): LarapexChart
     {
-        $this->dataLabels = $this->encode(['enabled' => $enabled]);
+        $this->dataLabels = ['enabled' => $enabled];
 
         return $this;
     }
@@ -406,7 +411,7 @@ class LarapexChart
 
     public function setSparkline(bool $enabled = true): LarapexChart
     {
-        $this->sparkline = $this->encode(['enabled' => $enabled]);
+        $this->sparkline = ['enabled' => $enabled];
 
         return $this;
     }
@@ -479,6 +484,10 @@ class LarapexChart
     |--------------------------------------------------------------------------
     | Getters
     |--------------------------------------------------------------------------
+    |
+    | Getters of object-valued options return encoded JSON, which views
+    | published from releases before the options builder print as-is.
+    |
     */
 
     /**
@@ -555,7 +564,7 @@ class LarapexChart
 
     public function dataset(): string
     {
-        return $this->dataset;
+        return $this->dataset === null ? '' : $this->encode($this->dataset);
     }
 
     public function height(): int
@@ -570,57 +579,57 @@ class LarapexChart
 
     public function colors(): string
     {
-        return $this->colors;
+        return $this->encode($this->colors);
     }
 
     public function horizontal(): string
     {
-        return $this->horizontal;
+        return $this->encode($this->horizontal);
     }
 
     public function xAxis(): string
     {
-        return $this->xAxis;
+        return $this->encode($this->xAxis);
     }
 
     public function yAxis(): string
     {
-        return $this->yAxis;
+        return $this->yAxis === null ? '' : $this->encode($this->yAxis);
     }
 
     public function grid(): string
     {
-        return $this->grid;
+        return $this->encode($this->grid);
     }
 
     public function markers(): string
     {
-        return $this->markers;
+        return $this->encode($this->markers);
     }
 
     public function stroke(): string
     {
-        return $this->stroke;
+        return $this->stroke === null ? '' : $this->encode($this->stroke);
     }
 
     public function toolbar(): string
     {
-        return $this->toolbar;
+        return $this->encode($this->toolbar);
     }
 
     public function zoom(): string
     {
-        return $this->zoom;
+        return $this->encode($this->zoom);
     }
 
     public function dataLabels(): string
     {
-        return $this->dataLabels;
+        return $this->encode($this->dataLabels);
     }
 
     public function sparkline(): string
     {
-        return $this->sparkline;
+        return $this->encode($this->sparkline);
     }
 
     public function stacked(): bool
@@ -745,10 +754,10 @@ class LarapexChart
             'type' => $this->type(),
             'height' => $this->height(),
             'width' => $this->width(),
-            'toolbar' => $this->decode($this->toolbar()),
-            'zoom' => $this->decode($this->zoom()),
+            'toolbar' => $this->toolbar,
+            'zoom' => $this->zoom,
             'fontFamily' => $this->fontFamily(),
-            'sparkline' => $this->decode($this->sparkline()),
+            'sparkline' => $this->sparkline,
             'stacked' => $this->stacked(),
         ];
 
@@ -759,11 +768,11 @@ class LarapexChart
         $options = [
             'chart' => $chart,
             'plotOptions' => [
-                'bar' => $this->decode($this->horizontal()),
+                'bar' => $this->horizontal,
             ],
-            'colors' => $this->decode($this->colors()),
-            'series' => $this->decode($this->dataset()),
-            'dataLabels' => $this->decode($this->dataLabels()),
+            'colors' => $this->colors,
+            'series' => $this->dataset,
+            'dataLabels' => $this->dataLabels,
         ];
 
         if ($this->theme !== null) {
@@ -779,14 +788,14 @@ class LarapexChart
             'text' => $this->subtitle(),
             'align' => $this->subtitlePosition(),
         ];
-        $options['xaxis'] = $this->decode($this->xAxis());
+        $options['xaxis'] = $this->xAxis;
         $options['yaxis'] = [
             'labels' => [
                 'show' => $this->showYAxisLabels(),
             ],
         ];
-        $options['grid'] = $this->decode($this->grid());
-        $options['markers'] = $this->decode($this->markers());
+        $options['grid'] = $this->grid;
+        $options['markers'] = $this->markers;
         $options['legend'] = [
             'show' => $this->shouldShowLegend(),
         ];
@@ -796,12 +805,12 @@ class LarapexChart
             $options['labels'] = $this->labels();
         }
 
-        if ($this->stroke() !== '') {
-            $options['stroke'] = $this->decode($this->stroke());
+        if ($this->stroke !== null) {
+            $options['stroke'] = $this->stroke;
         }
 
-        if ($this->yAxis() !== '') {
-            $options['yaxis'] = $this->decode($this->yAxis());
+        if ($this->yAxis !== null) {
+            $options['yaxis'] = $this->yAxis;
         }
 
         return $this->options === null ? $options : $this->replaceOptions($options, $this->options);
@@ -816,11 +825,6 @@ class LarapexChart
     {
         foreach ($overrides as $key => $value) {
             $current = $defaults[$key] ?? null;
-
-            // Generated options hold decoded JSON objects; merge into them as arrays.
-            if ($current instanceof \stdClass) {
-                $current = get_object_vars($current);
-            }
 
             if ($this->isAssociativeArray($value) && $this->isAssociativeArray($current)) {
                 $defaults[$key] = $this->replaceOptions($current, $value);
@@ -840,14 +844,6 @@ class LarapexChart
     private function isAssociativeArray(mixed $value): bool
     {
         return is_array($value) && ! array_is_list($value);
-    }
-
-    /**
-     * @param  string  $encoded
-     */
-    protected function decode($encoded): mixed
-    {
-        return json_decode($encoded);
     }
 
     protected function encode(mixed $value): string

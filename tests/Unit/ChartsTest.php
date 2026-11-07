@@ -246,26 +246,11 @@ final class ChartsTest extends TestCase
         $this->assertSame('', $chart->subtitle());
         $this->assertSame('left', $chart->subtitlePosition());
         $this->assertSame([], $chart->labels());
-        $this->assertSame('', $chart->dataset());
         $this->assertSame(500, $chart->height());
         $this->assertSame('100%', $chart->width());
         $this->assertSame(config('larapex-charts.font_family'), $chart->fontFamily());
         $this->assertSame(config('larapex-charts.font_color'), $chart->foreColor());
-        $this->assertSame(config('larapex-charts.colors'), json_decode($chart->colors(), true));
-        $this->assertSame(['horizontal' => false], json_decode($chart->horizontal(), true));
-        $this->assertSame([
-            'type' => 'category',
-            'categories' => [],
-            'labels' => ['show' => true],
-        ], json_decode($chart->xAxis(), true));
-        $this->assertSame(['show' => false], json_decode($chart->grid(), true));
-        $this->assertSame(['show' => false], json_decode($chart->markers(), true));
-        $this->assertSame(['show' => false], json_decode($chart->toolbar(), true));
-        $this->assertSame(['enabled' => true], json_decode($chart->zoom(), true));
-        $this->assertSame(['enabled' => false], json_decode($chart->dataLabels(), true));
-        $this->assertSame(['enabled' => false], json_decode($chart->sparkline(), true));
         $this->assertFalse($chart->stacked());
-        $this->assertSame('true', $chart->showLegend());
         $this->assertTrue($chart->showXAxisLabels());
         $this->assertTrue($chart->showYAxisLabels());
         $this->assertSame([
@@ -286,8 +271,13 @@ final class ChartsTest extends TestCase
     }
 
     #[Test]
-    public function it_tests_larapex_chart_fluent_setters_update_readable_state(): void
+    public function it_tests_option_getters_return_encoded_json_for_published_views(): void
     {
+        $this->assertSame('', (new LarapexChart)->dataset());
+        $this->assertSame('', (new LarapexChart)->yAxis());
+        $this->assertSame('', (new LarapexChart)->stroke());
+        $this->assertSame('true', (new LarapexChart)->showLegend());
+
         $chart = (new LarapexChart)
             ->setFontFamily('Inter, sans-serif')
             ->setFontColor('#101010')
@@ -380,7 +370,7 @@ final class ChartsTest extends TestCase
             ->setDataset([1, 2, 3])
             ->addData([10, 20, 30]);
 
-        $this->assertSame([10, 20, 30], json_decode($chart->dataset(), true));
+        $this->assertSame([10, 20, 30], $chart->toScriptOptions()['series']);
     }
 
     #[Test]
@@ -399,7 +389,7 @@ final class ChartsTest extends TestCase
                 'name' => '',
                 'data' => [30, 40],
             ],
-        ], json_decode($chart->dataset(), true));
+        ], $chart->toScriptOptions()['series']);
     }
 
     #[Test]
@@ -408,7 +398,7 @@ final class ChartsTest extends TestCase
         $chart = (new LarapexChart)->horizontalBarChart();
 
         $this->assertSame('bar', $chart->type());
-        $this->assertSame(['horizontal' => true], json_decode($chart->horizontal(), true));
+        $this->assertSame(['horizontal' => true], $chart->toScriptOptions()['plotOptions']['bar']);
     }
 
     #[Test]

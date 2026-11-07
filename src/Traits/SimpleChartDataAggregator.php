@@ -9,7 +9,7 @@ trait SimpleChartDataAggregator
      */
     public function addData(array $data): self
     {
-        $this->dataset = $this->encode($data);
+        $this->dataset = $data;
 
         return $this;
     }
