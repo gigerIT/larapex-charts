@@ -1,5 +1,14 @@
 # Changelog
 
+## [10.2.1](https://github.com/gigerIT/larapex-charts/compare/v10.2.0...v10.2.1) (2026-11-07)
+
+
+### Bug Fixes
+
+* apply axis label flags regardless of setter order ([f0f7895](https://github.com/gigerIT/larapex-charts/commit/f0f78957760ef73630c0745722a6a2797eaf7d25))
+* keep the chart subclass type through fluent setters ([ebd192c](https://github.com/gigerIT/larapex-charts/commit/ebd192ceade9ed6934bad5fa2768f63afff2cb60))
+* reject combining make:chart --vue and --json ([7581154](https://github.com/gigerIT/larapex-charts/commit/758115408b34e764fa2b8cf8f0d426a736e59fca))
+
 ## [10.2.0](https://github.com/gigerIT/larapex-charts/compare/v10.1.1...v10.2.0) (2026-11-06)
 
 
