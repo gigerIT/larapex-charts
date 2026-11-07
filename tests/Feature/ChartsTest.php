@@ -369,7 +369,13 @@ final class ChartsTest extends TestCase
                 'categories' => ['Jan', 'Feb'],
                 'labels' => ['show' => true],
             ],
-            'yaxis' => ['min' => 0, 'max' => 100, 'tickAmount' => 5, 'show' => false],
+            'yaxis' => [
+                'min' => 0,
+                'max' => 100,
+                'tickAmount' => 5,
+                'show' => false,
+                'labels' => ['show' => true],
+            ],
             'grid' => [
                 'show' => true,
                 'strokeDashArray' => 2,
@@ -433,6 +439,41 @@ final class ChartsTest extends TestCase
                 ],
             ],
         ], $this->normalize($chart->toScriptOptions()));
+    }
+
+    #[Test]
+    public function it_tests_axis_label_flags_apply_whatever_the_setter_order(): void
+    {
+        $charts = [
+            'flags first' => (new LarapexChart)->lineChart()
+                ->setShowXAxisLabels(false)
+                ->setShowYAxisLabels(false)
+                ->setXAxis(['Jan', 'Feb'])
+                ->setYAxis(0, 10),
+            'flags last' => (new LarapexChart)->lineChart()
+                ->setXAxis(['Jan', 'Feb'])
+                ->setYAxis(0, 10)
+                ->setShowXAxisLabels(false)
+                ->setShowYAxisLabels(false),
+        ];
+
+        foreach ($charts as $order => $chart) {
+            $options = $chart->toScriptOptions();
+
+            $this->assertSame(
+                ['type' => 'category', 'categories' => ['Jan', 'Feb'], 'labels' => ['show' => false]],
+                $options['xaxis'],
+                $order,
+            );
+            $this->assertSame(
+                ['min' => 0, 'max' => 10, 'tickAmount' => 10, 'show' => true, 'labels' => ['show' => false]],
+                $options['yaxis'],
+                $order,
+            );
+        }
+
+        $withoutAxisSetters = (new LarapexChart)->lineChart()->setShowXAxisLabels(false)->toScriptOptions();
+        $this->assertSame(['show' => false], $withoutAxisSetters['xaxis']['labels']);
     }
 
     #[Test]

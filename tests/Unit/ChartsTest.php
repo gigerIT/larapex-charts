@@ -314,9 +314,12 @@ final class ChartsTest extends TestCase
         $this->assertSame([
             'type' => 'datetime',
             'categories' => ['2024-01-01', '2024-02-01'],
-            'labels' => ['show' => true],
+            'labels' => ['show' => false],
         ], json_decode($chart->xAxis(), true));
-        $this->assertSame(['min' => 10, 'max' => 20, 'tickAmount' => 20, 'show' => true], json_decode($chart->yAxis(), true));
+        $this->assertSame(
+            ['min' => 10, 'max' => 20, 'tickAmount' => 20, 'show' => true, 'labels' => ['show' => false]],
+            json_decode($chart->yAxis(), true),
+        );
         $this->assertSame([
             'show' => true,
             'strokeDashArray' => 3,

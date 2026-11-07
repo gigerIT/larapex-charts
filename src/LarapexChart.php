@@ -84,8 +84,8 @@ class LarapexChart
     /** @var array{horizontal: bool} */
     protected array $horizontal = ['horizontal' => false];
 
-    /** @var array{type: string, categories: array<int, string|int|float>, labels: array{show: bool}} */
-    protected array $xAxis;
+    /** @var array{type: string, categories: array<int, string|int|float>} */
+    protected array $xAxis = ['type' => 'category', 'categories' => []];
 
     /** @var array{min: int|float, max: int|float, tickAmount: int|float, show: bool}|null */
     protected ?array $yAxis = null;
@@ -140,7 +140,6 @@ class LarapexChart
         $repeatCount = (int) ceil(25 / strlen($this->chartLetters));
         $this->id = substr(str_shuffle(str_repeat($this->chartLetters, $repeatCount)), 1, 25);
         $this->colors = config('larapex-charts.colors');
-        $this->setXAxis([]);
         $this->fontFamily = config('larapex-charts.font_family');
         $this->foreColor = config('larapex-charts.font_color');
     }
@@ -298,9 +297,6 @@ class LarapexChart
         $this->xAxis = [
             'type' => $type,
             'categories' => $categories,
-            'labels' => [
-                'show' => $this->showXAxisLabels(),
-            ],
         ];
 
         return $this;
@@ -589,12 +585,12 @@ class LarapexChart
 
     public function xAxis(): string
     {
-        return $this->encode($this->xAxis);
+        return $this->encode($this->xAxisOptions());
     }
 
     public function yAxis(): string
     {
-        return $this->yAxis === null ? '' : $this->encode($this->yAxis);
+        return $this->yAxis === null ? '' : $this->encode($this->yAxisOptions());
     }
 
     public function grid(): string
@@ -788,12 +784,8 @@ class LarapexChart
             'text' => $this->subtitle(),
             'align' => $this->subtitlePosition(),
         ];
-        $options['xaxis'] = $this->xAxis;
-        $options['yaxis'] = [
-            'labels' => [
-                'show' => $this->showYAxisLabels(),
-            ],
-        ];
+        $options['xaxis'] = $this->xAxisOptions();
+        $options['yaxis'] = $this->yAxisOptions();
         $options['grid'] = $this->grid;
         $options['markers'] = $this->markers;
         $options['legend'] = [
@@ -809,11 +801,25 @@ class LarapexChart
             $options['stroke'] = $this->stroke;
         }
 
-        if ($this->yAxis !== null) {
-            $options['yaxis'] = $this->yAxis;
-        }
-
         return $this->options === null ? $options : $this->replaceOptions($options, $this->options);
+    }
+
+    /**
+     * Label flags join their axis here, not in setXAxis(), so setter order does not matter.
+     *
+     * @return array{type: string, categories: array<int, string|int|float>, labels: array{show: bool}}
+     */
+    private function xAxisOptions(): array
+    {
+        return [...$this->xAxis, 'labels' => ['show' => $this->showXAxisLabels]];
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function yAxisOptions(): array
+    {
+        return [...($this->yAxis ?? []), 'labels' => ['show' => $this->showYAxisLabels]];
     }
 
     /**
