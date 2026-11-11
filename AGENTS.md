@@ -157,15 +157,8 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 - `make:chart` or generated-example changes need tests for published stubs and
   package fallback stubs.
 - Do not add tooling, generated files, or broad refactors unless requested.
-- Documentation placement: user-facing behavior changes update both
-  `README.md` and the distributed consumer skill
-  `resources/boost/skills/larapex-charts-development/SKILL.md`; use root
-  `AGENTS.md` only for durable repo-wide guidance; use skills under
-  `.agents/skills` for bounded subsystem knowledge; use code comments only for
-  non-obvious local behavior.
-- Before finalizing, verify `AGENTS.md`, `README.md`, the consumer skill,
-  repo-owned skills under `.agents/skills`, and code comments need no further
-  update. Avoid duplicate docs; place new docs at the narrowest correct level.
+- User-facing behavior changes update both `README.md` and the distributed
+  consumer skill `resources/boost/skills/larapex-charts-development/SKILL.md`.
 
 ## Extensibility Hooks
 
@@ -195,10 +188,3 @@ falls back to it, and the `larapex-charts-stubs` tag publishes it to an app's
 - `src/LarapexChart.php` fluent chart API, options builder, and outputs.
 - `src/LarapexChartsServiceProvider.php` bindings, publish tags, and views.
 - `src/Console/ChartMakeCommand.php` generated chart behavior.
-
-## Maintaining this file
-
-Keep this file for knowledge useful to almost every future agent session in this project.
-Do not repeat what the codebase already shows; point to the authoritative file or command instead.
-Prefer rewriting or pruning existing entries over appending new ones.
-When updating this file, preserve this bar for all agents and keep entries concise.
